@@ -1,0 +1,28 @@
+# PD-1 Runbook (Swin on LungHist700)
+
+## 1) Prepare dataset
+Expected structure:
+
+- `data/lunghist700_binary/train/normal`
+- `data/lunghist700_binary/train/pathological`
+- `data/lunghist700_binary/val/normal`
+- `data/lunghist700_binary/val/pathological`
+
+## 2) Install dependencies
+```bash
+pip install -r requirements-pd1.txt
+```
+
+## 3) Train and evaluate
+```bash
+python scripts/pd1_train_swin_lunghist700.py \
+  --data-dir data/lunghist700_binary \
+  --epochs 5 \
+  --batch-size 16 \
+  --lr 1e-4 \
+  --published-baseline 0.0000 \
+  --output reports/pd1/pd1_metrics.json
+```
+
+## 4) Fill baseline comparison
+Update `baseline_comparison.csv` with published baseline and generated model metric.

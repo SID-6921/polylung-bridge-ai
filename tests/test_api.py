@@ -30,3 +30,12 @@ def test_analyze_response_shape():
     }
     assert expected_keys.issubset(data.keys())
     assert 0 <= data["bridge_score"] <= 100
+
+
+def test_pspii_endpoint():
+    payload = {"polymer_type": "PS"}
+    response = client.post("/pspii", json=payload)
+    assert response.status_code == 200
+    data = response.json()
+    assert data["polymer_type"] == "PS"
+    assert 0 <= data["pspii"] <= 1

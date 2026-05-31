@@ -17,3 +17,12 @@ class AnalyzeResponse(BaseModel):
     bridge_score: float
     risk_tier: str
     details: Dict[str, float]
+
+
+class PspiiRequest(BaseModel):
+    polymer_type: str
+
+
+class PspiiResponse(BaseModel):
+    polymer_type: str
+    pspii: float

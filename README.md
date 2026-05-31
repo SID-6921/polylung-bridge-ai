@@ -59,14 +59,30 @@ Response includes:
 
 ## Test
 ```bash
-PYTHONPATH=backend pytest -q
+PYTHONPATH=backend python -m pytest -q
 ```
 
 ## 4-Week Deliverable Mapping
-- PD-1: attach trained Swin results and baseline comparison in `/reports/pd1`
-- PD-2: store extracted cytokine values and normalization notebook in `/reports/pd2`
-- PD-3: add HBIL 3-paragraph writeup in `/reports/pd3_hbil_writeup.md`
-- PD-4: run 100-call integration benchmark and save logs in `/reports/pd4_integration`
+- PD-1: run `scripts/pd1_train_swin_lunghist700.py` and store metrics in `reports/pd1/pd1_metrics.json`
+- PD-2: fill `reports/pd2/balkrishna_2024_extracted.csv`, run `scripts/derive_pspii_weights.py`, and save to `reports/pd2/pspii_weights_final.json`
+- PD-3: excluded from public artifacts due HBIL data protection policy
+- PD-4: run `scripts/integration_benchmark.py` for 100 calls against `/pspii` and save output in `reports/pd4_integration/benchmark_result.json`
+
+## PD-1 Command
+```bash
+pip install -r requirements-pd1.txt
+python scripts/pd1_train_swin_lunghist700.py --data-dir data/lunghist700_binary --epochs 5 --batch-size 16 --lr 1e-4 --published-baseline 0.0000 --output reports/pd1/pd1_metrics.json
+```
+
+## PD-2 Command
+```bash
+python scripts/derive_pspii_weights.py --input reports/pd2/balkrishna_2024_extracted.csv --output reports/pd2/pspii_weights_final.json
+```
+
+## PD-4 Command
+```bash
+python scripts/integration_benchmark.py --url http://localhost:8000/pspii --calls 100 --polymer PS --output reports/pd4_integration/benchmark_result.json
+```
 
 ## License
 Add your preferred license before external distribution.

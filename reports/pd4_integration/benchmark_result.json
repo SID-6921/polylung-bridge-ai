@@ -1,0 +1,9 @@
+{
+  "url": "http://127.0.0.1:8000/pspii",
+  "calls": 100,
+  "polymer": "PS",
+  "success": 100,
+  "success_rate": 1.0,
+  "latency_ms_p50": 15.14,
+  "latency_ms_p95": 27.85
+}

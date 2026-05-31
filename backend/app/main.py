@@ -2,7 +2,7 @@ from random import choice, randint, random
 
 from fastapi import FastAPI
 
-from .schemas import AnalyzeRequest, AnalyzeResponse
+from .schemas import AnalyzeRequest, AnalyzeResponse, PspiiRequest, PspiiResponse
 from .scoring import build_details, compute_bridge_score, compute_mpri, compute_pspii, risk_tier
 
 app = FastAPI(title="PolyLung Bridge AI API", version="0.1.0")
@@ -13,6 +13,14 @@ POLYMERS = ["PE", "PP", "PS", "PET", "PVC", "Nylon", "Acrylic", "PU", "PC", "ABS
 @app.get("/health")
 def health() -> dict:
     return {"status": "ok"}
+
+
+@app.post("/pspii", response_model=PspiiResponse)
+def pspii(req: PspiiRequest) -> PspiiResponse:
+    return PspiiResponse(
+        polymer_type=req.polymer_type,
+        pspii=compute_pspii(req.polymer_type),
+    )
 
 
 @app.post("/analyze", response_model=AnalyzeResponse)

@@ -1,3 +1,5 @@
+import json
+from pathlib import Path
 from typing import Dict
 
 TOXICITY_WEIGHTS = {
@@ -26,11 +28,29 @@ PSPII_WEIGHTS = {
     "ABS": 2.2,
 }
 
+PSPII_FILE_PATH = Path(__file__).resolve().parents[2] / "data" / "pspii_weights_final.json"
+
 EXPOSURE_MULTIPLIER = {
     "inhalation": 1.5,
     "ingestion": 1.0,
     "dermal": 0.5,
 }
+
+
+def load_pspii_weights() -> Dict[str, float]:
+    if not PSPII_FILE_PATH.exists():
+        return PSPII_WEIGHTS
+
+    data = json.loads(PSPII_FILE_PATH.read_text(encoding="utf-8"))
+    parsed: Dict[str, float] = {}
+    for polymer, value in data.items():
+        parsed[polymer] = float(value)
+    return parsed
+
+
+def get_pspii_weight(polymer_type: str) -> float:
+    weights = load_pspii_weights()
+    return weights.get(polymer_type, 0.3)
 
 
 def compute_mpri(polymer_type: str, particle_count: int, exposure_route: str, income_index: float) -> float:
@@ -42,9 +62,10 @@ def compute_mpri(polymer_type: str, particle_count: int, exposure_route: str, in
 
 
 def compute_pspii(polymer_type: str) -> float:
-    raw = PSPII_WEIGHTS.get(polymer_type, 1.5)
-    normalized = raw / 5.0
-    return round(min(max(normalized, 0.0), 1.0), 3)
+    value = get_pspii_weight(polymer_type)
+    if value > 1.0:
+        value = value / 5.0
+    return round(min(max(value, 0.0), 1.0), 3)
 
 
 def compute_bridge_score(mpri: float, pspii: float) -> float:
@@ -65,6 +86,6 @@ def risk_tier(score: float) -> str:
 def build_details(polymer_type: str, exposure_route: str) -> Dict[str, float]:
     return {
         "toxicity_weight": TOXICITY_WEIGHTS.get(polymer_type, 2.0),
-        "pspii_weight": PSPII_WEIGHTS.get(polymer_type, 1.5),
+        "pspii_weight": get_pspii_weight(polymer_type),
         "route_multiplier": EXPOSURE_MULTIPLIER[exposure_route],
     }
