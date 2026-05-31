@@ -1,0 +1,6 @@
+zip_code,polymer,particle_count,exposure_route,income_index,mpri,pspii,bridge_score,tier
+33544,PS,120,ingestion,1.1,5.280,0.760,16.051,Elevated
+32501,PVC,180,inhalation,1.3,17.550,0.900,63.180,High
+33602,PE,90,ingestion,0.8,1.440,0.240,1.382,Low
+32960,PU,140,inhalation,1.0,8.400,0.640,21.504,Elevated
+32401,PP,220,ingestion,1.2,5.280,0.260,5.491,Low
