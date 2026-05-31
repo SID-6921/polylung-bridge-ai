@@ -16,7 +16,7 @@ def min_max_norm(series: pd.Series) -> pd.Series:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Derive PSPII weights from extracted cytokine data.")
     parser.add_argument("--input", required=True, help="CSV with columns: polymer, TNFa, IL1b, IL5, IL6, MIP2a")
-    parser.add_argument("--output", default="reports/pd2/pspii_weights_final.json")
+    parser.add_argument("--output", default="evidence/public/pd2/pspii_weights_final.json")
     parser.add_argument("--allow-placeholder", action="store_true", help="Allow placeholder zero-only inputs")
     args = parser.parse_args()
 

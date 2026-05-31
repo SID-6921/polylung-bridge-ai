@@ -6,10 +6,10 @@ Files:
 
 Generate weights:
 ```bash
-python scripts/derive_pspii_weights.py --input reports/pd2/balkrishna_2024_extracted.csv --output reports/pd2/pspii_weights_final.json
+python scripts/derive_pspii_weights.py --input evidence/public/pd2/balkrishna_2024_extracted.csv --output evidence/public/pd2/pspii_weights_final.json
 ```
 
 Then sync to API runtime file:
 ```bash
-copy reports\pd2\pspii_weights_final.json data\pspii_weights_final.json
+copy evidence\public\pd2\pspii_weights_final.json data\pspii_weights_final.json
 ```

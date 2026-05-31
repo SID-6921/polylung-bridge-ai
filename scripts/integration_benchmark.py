@@ -12,7 +12,7 @@ def main() -> None:
     parser.add_argument("--url", default="http://localhost:8000/pspii")
     parser.add_argument("--calls", type=int, default=100)
     parser.add_argument("--polymer", default="PS")
-    parser.add_argument("--output", default="reports/pd4_integration/benchmark_result.json")
+    parser.add_argument("--output", default="evidence/public/pd4/benchmark_result.json")
     args = parser.parse_args()
 
     latencies = []

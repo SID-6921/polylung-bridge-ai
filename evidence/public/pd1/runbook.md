@@ -7,7 +7,7 @@ If you have `LungHist700.rar`, extract to:
 
 Then run:
 ```bash
-python scripts/pd1_prepare_lunghist700_binary.py --source data/raw/LungHist700/data/images --output data/lunghist700_binary --summary reports/pd1/dataset_split_summary.json
+python scripts/pd1_prepare_lunghist700_binary.py --source data/raw/LungHist700/data/images --output data/lunghist700_binary --summary evidence/public/pd1/dataset_split_summary.json
 ```
 
 Prepared structure:
@@ -25,12 +25,12 @@ pip install -r requirements-pd1.txt
 ```bash
 python scripts/pd1_train_swin_lunghist700.py \
   --data-dir data/lunghist700_binary \
-  --epochs 5 \
-  --batch-size 16 \
+  --epochs 1 \
+  --batch-size 4 \
+  --num-workers 0 \
   --lr 1e-4 \
   --published-baseline 0.0000 \
-  --pretrained \
-  --output reports/pd1/pd1_metrics.json
+  --output evidence/public/pd1/pd1_metrics.json
 ```
 
 ## 4) Fill baseline comparison

@@ -54,7 +54,7 @@ def main() -> None:
     parser.add_argument("--output", default="data/lunghist700_binary")
     parser.add_argument("--val-ratio", type=float, default=0.2)
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--summary", default="reports/pd1/dataset_split_summary.json")
+    parser.add_argument("--summary", default="evidence/public/pd1/dataset_split_summary.json")
     args = parser.parse_args()
 
     source = Path(args.source)

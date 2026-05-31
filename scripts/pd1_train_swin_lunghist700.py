@@ -96,7 +96,7 @@ def main() -> None:
     parser.add_argument("--batch-size", type=int, default=16)
     parser.add_argument("--num-workers", type=int, default=0)
     parser.add_argument("--lr", type=float, default=1e-4)
-    parser.add_argument("--output", default="reports/pd1/pd1_metrics.json")
+    parser.add_argument("--output", default="evidence/public/pd1/pd1_metrics.json")
     parser.add_argument("--published-baseline", type=float, default=0.0)
     parser.add_argument("--pretrained", action="store_true", help="Use ImageNet pretrained weights")
     args = parser.parse_args()
