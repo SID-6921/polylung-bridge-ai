@@ -13,3 +13,5 @@ Then sync to API runtime file:
 ```bash
 copy evidence\public\pd2\pspii_weights_final.json data\pspii_weights_final.json
 ```
+
+Note: Fill this template using Fig. 5 WebPlotDigitizer values before running the compute script.

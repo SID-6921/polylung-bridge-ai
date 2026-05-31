@@ -65,3 +65,7 @@ python scripts/integration_benchmark.py --url http://localhost:8000/pspii --call
 ## Notes
 - Legacy `reports/` folders contain `MOVED.md` pointers to the new `evidence/public/` locations.
 - Do not commit restricted HBIL data or unapproved HBIL metrics.
+
+## PD-2
+
+Use scripts/pd2_compute_pspii.py with the extracted template in evidence/public/pd2/balkrishna_2024_extracted.csv to run the PD-2 compute pipeline.

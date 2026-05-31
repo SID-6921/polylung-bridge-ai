@@ -1,7 +1,4 @@
-polymer,TNFa,IL1b,IL5,IL6,MIP2a
-PS,0,0,0,0,0
-PVC,0,0,0,0,0
-PU,0,0,0,0,0
-PET,0,0,0,0,0
-PE,0,0,0,0,0
-PP,0,0,0,0,0
+polymer,group,timepoint_or_condition,TNFa,IL1b,IL5,IL6,MIP2a,unit,error_type,n,source_figure,source_panel,notes
+PS,Control,match_fig5,0,0,0,0,0,pg/mL,SEM,,Fig.5,,
+PS,PS_microplastic,match_fig5,0,0,0,0,0,pg/mL,SEM,,Fig.5,,
+PS,PS_plus_treatment,match_fig5,0,0,0,0,0,pg/mL,SEM,,Fig.5,,
