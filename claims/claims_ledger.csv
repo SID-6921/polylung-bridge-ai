@@ -2,5 +2,5 @@ claim_id,claim_text,status,data_source,script,artifact_path,approval
 PD1-001,Binary accuracy on LungHist700 run,verified,LungHist700,scripts/pd1_train_swin_lunghist700.py,evidence/public/pd1/pd1_metrics.json,public
 PD1-002,Published baseline comparison,pending,published baseline paper,scripts/pd1_train_swin_lunghist700.py,evidence/public/pd1/baseline_comparison.csv,public
 PD2-001,PSPII weights derived from extracted cytokines,verified,Balkrishna_Fig5_figure_read_n8,scripts/derive_pspii_weights.py,evidence/public/pd2/pspii_weights_final.json,public
-PD3-001,HBIL metric statement,restricted,HBIL internal,NA,evidence/restricted/hbil/README.md,restricted
+PD3-001,HBIL clinical cohort validation,data_unavailable,HBIL declined external sharing as of 2026-05-31,NA,evidence/restricted/hbil/README.md,restricted
 PD4-001,100-call integration benchmark success and latency,verified,mock /pspii endpoint,scripts/integration_benchmark.py,evidence/public/pd4/benchmark_result.json,public

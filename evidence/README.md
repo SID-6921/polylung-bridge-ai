@@ -1,14 +1,20 @@
 # Evidence Layout
 
-This repository uses evidence-grade artifact separation:
+Artifact separation policy for R21 preliminary data:
 
-- `evidence/public/`: reproducible, shareable artifacts from open/public data
-- `evidence/restricted/`: placeholders and policy notices for non-shareable evidence
+- `evidence/public/`   — reproducible, reviewer-safe outputs from open/published data
+- `evidence/restricted/` — policy notices for non-shareable evidence (no protected data committed)
 
-Public subfolders:
-- `evidence/public/pd1/`: LungHist700 training evidence
-- `evidence/public/pd2/`: PSPII derivation evidence from published data extraction
-- `evidence/public/pd4/`: API integration benchmark evidence
+## Public artifacts
 
-Restricted subfolders:
-- `evidence/restricted/hbil/`: HBIL-restricted context notes only (no protected data)
+| Folder | PD | Description |
+|--------|----|-------------|
+| `pd1/` | PD-1 | LungHist700 Swin-T training evidence |
+| `pd2/` | PD-2 | PSPII derivation from Balkrishna 2025 Fig.5 cytokine extraction |
+| `pd4/` | PD-4 | API integration latency benchmark (100 calls) |
+
+## Restricted artifacts
+
+| Folder | PD | Description |
+|--------|----|-------------|
+| `hbil/` | PD-3 | HBIL clinical cohort — data unavailable; policy notice only |
