@@ -60,6 +60,7 @@ python scripts/integration_benchmark.py --url http://localhost:8000/pspii --call
 
 ## Latest Verified Outputs
 - PD-1 (real LungHist700 run, 1 epoch): `binary_accuracy=0.7826`, `weighted_f1=0.6872`
+- PD-1 published-context baseline recorded: multiclass balanced accuracy `0.86` (not directly binary-comparable)
 - PD-4 (100 calls, mock PSPII endpoint): `success_rate=1.000`, `latency_ms_p50=8.79`, `latency_ms_p95=13.11`
 
 ## Notes

@@ -1,2 +1,3 @@
-metric,published_baseline,swin_binary_result,delta
-binary_accuracy,NA,0.7826,NA
+metric,published_baseline,swin_binary_result,delta,notes
+multiclass_balanced_accuracy,0.8600,NA,NA,published LungHist700 baseline from PLOS One 2026 (3-class)
+binary_accuracy,NA,0.7826,NA,no directly comparable published binary baseline identified yet
