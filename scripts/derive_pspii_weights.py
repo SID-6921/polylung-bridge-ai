@@ -17,6 +17,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Derive PSPII weights from extracted cytokine data.")
     parser.add_argument("--input", required=True, help="CSV with columns: polymer, TNFa, IL1b, IL5, IL6, MIP2a")
     parser.add_argument("--output", default="reports/pd2/pspii_weights_final.json")
+    parser.add_argument("--allow-placeholder", action="store_true", help="Allow placeholder zero-only inputs")
     args = parser.parse_args()
 
     df = pd.read_csv(args.input)
@@ -26,6 +27,15 @@ def main() -> None:
         raise ValueError(f"Missing columns: {sorted(missing)}")
 
     marker_cols = ["TNFa", "IL1b", "IL5", "IL6", "MIP2a"]
+
+    if not args.allow_placeholder:
+        marker_sum = df[marker_cols].abs().sum().sum()
+        if float(marker_sum) == 0.0:
+            raise ValueError(
+                "Input appears to be placeholder data (all cytokine values are zero). "
+                "Provide real extracted values from WebPlotDigitizer or pass --allow-placeholder explicitly."
+            )
+
     norm_df = df.copy()
     for c in marker_cols:
         norm_df[c] = min_max_norm(norm_df[c])

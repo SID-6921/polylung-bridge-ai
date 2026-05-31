@@ -26,3 +26,9 @@ pd2-sync-weights:
 
 pd4-benchmark:
 	python scripts/integration_benchmark.py --url http://localhost:8000/pspii --calls 100 --polymer PS --output reports/pd4_integration/benchmark_result.json
+
+pd1-prepare:
+	python scripts/pd1_prepare_lunghist700_binary.py --source data/raw/LungHist700/data/images --output data/lunghist700_binary --summary reports/pd1/dataset_split_summary.json
+
+pd1-train:
+	python scripts/pd1_train_swin_lunghist700.py --data-dir data/lunghist700_binary --epochs 1 --batch-size 8 --lr 1e-4 --output reports/pd1/pd1_metrics.json

@@ -4,6 +4,6 @@
   "polymer": "PS",
   "success": 100,
   "success_rate": 1.0,
-  "latency_ms_p50": 15.14,
-  "latency_ms_p95": 27.85
+  "latency_ms_p50": 8.79,
+  "latency_ms_p95": 13.11
 }

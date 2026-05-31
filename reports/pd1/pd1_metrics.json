@@ -1,0 +1,43 @@
+{
+  "device": "cpu",
+  "epochs": 1,
+  "batch_size": 8,
+  "learning_rate": 0.0001,
+  "binary_accuracy": 0.7826,
+  "published_baseline": 0.0,
+  "baseline_delta": 0.7826,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.6229,
+      "val_binary_accuracy": 0.7826
+    }
+  ],
+  "classification_report": {
+    "normal": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 30.0
+    },
+    "pathological": {
+      "precision": 0.782608695652174,
+      "recall": 1.0,
+      "f1-score": 0.8780487804878049,
+      "support": 108.0
+    },
+    "accuracy": 0.782608695652174,
+    "macro avg": {
+      "precision": 0.391304347826087,
+      "recall": 0.5,
+      "f1-score": 0.43902439024390244,
+      "support": 138.0
+    },
+    "weighted avg": {
+      "precision": 0.6124763705103969,
+      "recall": 0.782608695652174,
+      "f1-score": 0.6871686108165429,
+      "support": 138.0
+    }
+  }
+}

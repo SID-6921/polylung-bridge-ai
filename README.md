@@ -79,10 +79,16 @@ python scripts/pd1_train_swin_lunghist700.py --data-dir data/lunghist700_binary 
 python scripts/derive_pspii_weights.py --input reports/pd2/balkrishna_2024_extracted.csv --output reports/pd2/pspii_weights_final.json
 ```
 
+Note: the PD-2 script now rejects placeholder all-zero cytokine tables unless `--allow-placeholder` is explicitly provided.
+
 ## PD-4 Command
 ```bash
 python scripts/integration_benchmark.py --url http://localhost:8000/pspii --calls 100 --polymer PS --output reports/pd4_integration/benchmark_result.json
 ```
+
+## Latest Verified Outputs
+- PD-1 (real LungHist700 run, 1 epoch): `binary_accuracy=0.7826`, `weighted_f1=0.6872`
+- PD-4 (100 calls to mock PSPII endpoint): `success_rate=1.000`, `latency_ms_p50=8.79`, `latency_ms_p95=13.11`
 
 ## License
 Add your preferred license before external distribution.

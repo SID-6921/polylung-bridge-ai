@@ -11,7 +11,7 @@ from torchvision import datasets, transforms
 from torchvision.models import Swin_T_Weights, swin_t
 
 
-def build_dataloaders(data_dir: Path, batch_size: int) -> Tuple[DataLoader, DataLoader]:
+def build_dataloaders(data_dir: Path, batch_size: int, num_workers: int) -> Tuple[DataLoader, DataLoader]:
     train_tf = transforms.Compose(
         [
             transforms.Resize((224, 224)),
@@ -32,8 +32,8 @@ def build_dataloaders(data_dir: Path, batch_size: int) -> Tuple[DataLoader, Data
     train_ds = datasets.ImageFolder(str(data_dir / "train"), transform=train_tf)
     val_ds = datasets.ImageFolder(str(data_dir / "val"), transform=eval_tf)
 
-    train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True, num_workers=2)
-    val_loader = DataLoader(val_ds, batch_size=batch_size, shuffle=False, num_workers=2)
+    train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True, num_workers=num_workers)
+    val_loader = DataLoader(val_ds, batch_size=batch_size, shuffle=False, num_workers=num_workers)
     return train_loader, val_loader
 
 
@@ -94,9 +94,11 @@ def main() -> None:
     parser.add_argument("--data-dir", required=True, help="Dataset root with train/val folders")
     parser.add_argument("--epochs", type=int, default=5)
     parser.add_argument("--batch-size", type=int, default=16)
+    parser.add_argument("--num-workers", type=int, default=0)
     parser.add_argument("--lr", type=float, default=1e-4)
     parser.add_argument("--output", default="reports/pd1/pd1_metrics.json")
     parser.add_argument("--published-baseline", type=float, default=0.0)
+    parser.add_argument("--pretrained", action="store_true", help="Use ImageNet pretrained weights")
     args = parser.parse_args()
 
     data_dir = Path(args.data_dir)
@@ -104,10 +106,17 @@ def main() -> None:
         raise FileNotFoundError("Expected train/ and val/ under --data-dir")
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    train_loader, val_loader = build_dataloaders(data_dir, args.batch_size)
+    train_loader, val_loader = build_dataloaders(data_dir, args.batch_size, args.num_workers)
     class_names = train_loader.dataset.classes
 
-    model = swin_t(weights=Swin_T_Weights.IMAGENET1K_V1)
+    weights = None
+    if args.pretrained:
+        try:
+            weights = Swin_T_Weights.IMAGENET1K_V1
+        except Exception:
+            weights = None
+
+    model = swin_t(weights=weights)
     in_features = model.head.in_features
     model.head = nn.Linear(in_features, 2)
     model.to(device)

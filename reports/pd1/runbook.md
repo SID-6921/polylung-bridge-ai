@@ -1,8 +1,16 @@
 # PD-1 Runbook (Swin on LungHist700)
 
-## 1) Prepare dataset
-Expected structure:
+## 1) Extract and prepare dataset
+If you have `LungHist700.rar`, extract to:
 
+- `data/raw/LungHist700/data/images`
+
+Then run:
+```bash
+python scripts/pd1_prepare_lunghist700_binary.py --source data/raw/LungHist700/data/images --output data/lunghist700_binary --summary reports/pd1/dataset_split_summary.json
+```
+
+Prepared structure:
 - `data/lunghist700_binary/train/normal`
 - `data/lunghist700_binary/train/pathological`
 - `data/lunghist700_binary/val/normal`
@@ -21,6 +29,7 @@ python scripts/pd1_train_swin_lunghist700.py \
   --batch-size 16 \
   --lr 1e-4 \
   --published-baseline 0.0000 \
+  --pretrained \
   --output reports/pd1/pd1_metrics.json
 ```
 

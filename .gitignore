@@ -5,3 +5,5 @@ __pycache__/
 .pytest_cache/
 .streamlit/
 .DS_Store
+data/raw/
+data/lunghist700_binary/
