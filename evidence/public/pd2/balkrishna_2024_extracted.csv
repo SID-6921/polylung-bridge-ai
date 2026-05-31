@@ -1,4 +1,4 @@
 polymer,group,timepoint_or_condition,TNFa,IL1b,IL5,IL6,MIP2a,unit,error_type,n,source_figure,source_panel,notes
-PS,Control,match_fig5,0,0,0,0,0,pg/mL,SEM,,Fig.5,,
-PS,PS_microplastic,match_fig5,0,0,0,0,0,pg/mL,SEM,,Fig.5,,
-PS,PS_plus_treatment,match_fig5,0,0,0,0,0,pg/mL,SEM,,Fig.5,,
+PS,Control,PS_exposure_4mgkg,1.0,0.5,1.0,2.0,1.0,pg/mL,SEM,8,Fig.5,A-E,figure_read_mean_estimate
+PS,PS_microplastic,PS_exposure_4mgkg,22.0,2.2,4.5,22.0,3.5,pg/mL,SEM,8,Fig.5,A-E,figure_read_mean_estimate
+PS,PS_plus_PIR,PS_exposure_4mgkg,18.0,1.8,3.0,15.0,3.0,pg/mL,SEM,8,Fig.5,A-E,figure_read_mean_estimate
