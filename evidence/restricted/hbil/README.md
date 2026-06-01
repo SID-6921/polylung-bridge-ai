@@ -1,4 +1,4 @@
-# PD-3 — HBIL Clinical Cohort Validation
+# PD-3 - HBIL Clinical Cohort Validation
 
 ## Status: Data Unavailable for External Release
 
@@ -17,9 +17,14 @@ provided to this project.
 - A data use agreement (DUA) or institutional collaboration agreement is required
   before any HBIL-derived result can appear in publications or grant documents.
 
+## Fallback validation plan while HBIL data is unavailable
+- Keep PD-3 labeled as planned validation in the proposal narrative.
+- Prioritize open-data and literature-grounded validation evidence for PD-1/PD-2/PD-4 in this repository.
+- Re-open PD-3 evidence publication only after written approval and access controls are in place.
+
 ## Rules (unchanged)
 - Do NOT store raw HBIL data in this repository.
 - Do NOT store patient-level metrics.
 - Do NOT cite HBIL performance values in grants or publications without explicit
   written approval from the HBIL PI.
-- This folder contains policy notices only — no protected data is committed here.
+- This folder contains policy notices only - no protected data is committed here.

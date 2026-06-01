@@ -1,18 +1,18 @@
 # PolyLung Bridge AI
 
 End-to-end prototype linking polymer-specific microplastic signals to pulmonary inflammation risk.
-Built as preliminary data infrastructure for R21 grant submission.
+Built as preliminary-data feasibility infrastructure for R21 grant submission.
 
 ---
 
-## Preliminary Data Status
+## Preliminary Data Status (Feasibility Framing)
 
-| PD | Description | Status | Key Result | Artifact |
-|----|-------------|--------|------------|---------|
-| PD-1 | Swin-T binary classifier on LungHist700 H&E images | ? verified | binary_accuracy = 0.7826, weighted_f1 = 0.6872 (1 epoch, CPU) | `evidence/public/pd1/pd1_metrics.json` |
-| PD-2 | PSPII index from published BALF cytokine data | ? verified | PS PSPII weight = 1.0 (TNF-a, IL-1ß, IL-5, IL-6, MIP-2a; Balkrishna et al. 2025, Fig.5, n=8) | `evidence/public/pd2/pspii_weights_final.json` |
-| PD-3 | HBIL clinical cohort validation | ? data unavailable | HBIL has declined to share data or results publicly; no metric available for external release | `evidence/restricted/hbil/README.md` |
-| PD-4 | API integration latency benchmark | ? verified | success_rate = 1.000, p50 = 8.79 ms, p95 = 13.11 ms (100 calls) | `evidence/public/pd4/benchmark_result.json` |
+| PD | Description | Status | Feasibility Result | Artifact |
+|----|-------------|--------|--------------------|---------|
+| PD-1 | Swin-T binary classifier run on LungHist700 H&E images | pilot complete | Reproducible train/eval pipeline validated. Current 1-epoch CPU run shows majority-class collapse (normal F1=0.0, macro F1=0.439, weighted F1=0.687, accuracy=0.783). Not presented as validated classifier performance. | `evidence/public/pd1/pd1_metrics.json` |
+| PD-2 | PSPII derivation from published BALF cytokine data | method complete | Demonstrated one-polymer derivation workflow (PS). Output PSPII=1.0 is a normalized value from the current extraction table, not a cross-polymer maximum claim. | `evidence/public/pd2/pspii_weights_final.json` |
+| PD-3 | HBIL clinical cohort validation | data unavailable | HBIL data/results are not available for external release. Fallback: keep PD-3 as planned validation pending data-sharing approval. | `evidence/restricted/hbil/README.md` |
+| PD-4 | API integration benchmark against mock PSPII route | pilot complete | 100-call benchmark confirms API contract and overhead (success_rate=1.000, p50=8.79 ms, p95=13.11 ms) for mock endpoint, not full model inference latency. | `evidence/public/pd4/benchmark_result.json` |
 
 ---
 
@@ -20,19 +20,19 @@ Built as preliminary data infrastructure for R21 grant submission.
 
 ```
 polylung-bridge-ai/
-+-- backend/            FastAPI services (/health, /analyze, /pspii)
-+-- frontend/           Streamlit app
-+-- scripts/            Reproducible workflow scripts (PD-1, PD-2, PD-4)
-+-- evidence/
-¦   +-- public/
-¦   ¦   +-- pd1/        LungHist700 training evidence
-¦   ¦   +-- pd2/        PSPII derivation from Balkrishna 2025 Fig.5
-¦   ¦   +-- pd4/        API integration benchmark
-¦   +-- restricted/
-¦       +-- hbil/       Policy notice — no protected data committed
-+-- claims/             claims_ledger.csv — traceability ledger
-+-- governance/         Data-sharing and evidence policy
-+-- data/               Runtime weights (synced from evidence/public/pd2/)
+|-- backend/            FastAPI services (/health, /analyze, /pspii)
+|-- frontend/           Streamlit app
+|-- scripts/            Reproducible workflow scripts (PD-1, PD-2, PD-4)
+|-- evidence/
+|   |-- public/
+|   |   |-- pd1/        LungHist700 training evidence
+|   |   |-- pd2/        PSPII derivation from Balkrishna 2025 Fig.5
+|   |   `-- pd4/        API integration benchmark
+|   `-- restricted/
+|       `-- hbil/       Policy notice - no protected data committed
+|-- claims/             claims_ledger.csv - traceability ledger
+|-- governance/         Data-sharing and evidence policy
+`-- data/               Runtime weights (synced from evidence/public/pd2/)
 ```
 
 ---
@@ -83,11 +83,13 @@ python scripts/pd2_compute_pspii.py \
   --output-csv evidence/public/pd2/pspii_debug.csv
 ```
 Source: Balkrishna et al., *Biomed. Pharmacother.* 187 (2025) 118122, Fig.5 A-E.
-Values are figure-read mean estimates (n=8/group, pg/mL, mean ± SEM).
+Values are figure-read mean estimates (n=8/group, pg/mL, mean +/- SEM).
+Current public evidence includes one polymer (PS) and demonstrates method reproducibility.
 
 ### PD-3
 Not reproducible externally. HBIL clinical data is under institutional lock.
 No raw data or results have been committed to this repository.
+Fallback plan for proposal framing: maintain PD-3 as planned validation contingent on data-sharing approval and institutional agreement.
 
 ### PD-4 (API benchmark)
 ```bash
@@ -97,11 +99,20 @@ python scripts/integration_benchmark.py \
   --calls 100 --polymer PS \
   --output evidence/public/pd4/benchmark_result.json
 ```
+This benchmark measures API contract and overhead against a mock PSPII route, not full image-model inference latency.
+
+---
+
+## Priority Next Steps
+1. Run a GPU-based PD-1 training cycle with class-balancing and multi-epoch schedule; report macro F1, per-class F1, and confusion matrix.
+2. Extend PD-2 extraction/derivation to additional polymers using literature-grounded inputs.
+3. Keep PD-4 benchmark and inference latency reporting separated in all grant text.
+4. Track PD-3 as planned validation until data-sharing access is approved.
 
 ---
 
 ## Claims Traceability
-See `claims/claims_ledger.csv` — each claim maps to a script, artifact, and approval level.
+See `claims/claims_ledger.csv` - each claim maps to a script, artifact, and approval level.
 
 ## Governance
 See `governance/data_sharing_policy.md` for public vs restricted artifact policy.
