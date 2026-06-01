@@ -132,37 +132,46 @@ async def calculateRisk(
     try:
         if len(zipcode) != 5:
             warningMsg = "ZIP code is not valid, setting vulnerability index to baseline 1.0."
-            incomeDisplay= "Not available"
+            incomeDisplay = "Not available"
+            vulnerabilityindex = 1.0
         else:
-           
+            # 1. Fetch the secret key from Streamlit's environment structure
             census_key = os.getenv("CENSUS_API_KEY")
             
             if not census_key:
-                warningMsg = "Census API Key missing from environment, setting vulnerability index to baseline 1.0."
+                warningMsg = "Census API Key missing from cloud configuration, setting vulnerability index to baseline 1.0."
                 vulnerabilityindex = 1.0
                 incomeDisplay = "Not available"
             else:
                 censusURL = f"https://api.census.gov/data/2024/acs/acs5?get=B19013_001E&for=zip%20code%20tabulation%20area:{zipcode}&key={census_key}"
-                censusResponse = requests.get(censusURL, timeout=5).json()
+                
+                # 2. Add an explicit User-Agent header so the Census servers don't block the cloud instance
+                headers = {"User-Agent": "PolyLungBridgeAI/1.0 (Contact: admin@polylung.org)"}
+                
+                response = requests.get(censusURL, headers=headers, timeout=5)
+                response.raise_for_status()
+                censusResponse = response.json()
+                
+                # Extract the income value safely
                 medianincome = int(censusResponse[1][0])
                 
+                # 3. Keep calculation logic nested safe and sound inside the success layer
+                if medianincome < 0:
+                    incomeDisplay = "Not available"
+                    warningMsg = "Data for this zip code is suppressed, index set to baseline."
+                    vulnerabilityindex = 1.0
+                elif medianincome < 50000:
+                    vulnerabilityindex = 1.3  
+                    incomeDisplay = medianincome
+                elif medianincome > 90000:
+                    vulnerabilityindex = 0.8  
+                    incomeDisplay = medianincome
+                else:
+                    vulnerabilityindex = 1.0
+                    incomeDisplay = medianincome
                 
-        
-            
-            if medianincome < 0:
-                incomeDisplay = "Not available"
-                warningMsg = "Data for this zip code is suppressed, index set to baseline."
-            elif medianincome < 50000:
-              vulnerabilityindex = 1.3  
-              incomeDisplay = medianincome
-            elif medianincome > 90000:
-              vulnerabilityindex = 0.8  
-              incomeDisplay = medianincome
-            else:
-              incomeDisplay = medianincome
-                
-    except Exception:
-        warningMsg = "Census network error, falling back to baseline 1.0."
+    except Exception as e:
+        warningMsg = f"Census processing issue, falling back to baseline 1.0. Details: {str(e)}"
         incomeDisplay = "Not available"
         vulnerabilityindex = 1.0
    
