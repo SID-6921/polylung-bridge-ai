@@ -76,6 +76,14 @@ python scripts/pd1_train_swin_lunghist700.py \
 ```
 PD-1 reporting should prioritize macro F1, per-class F1, and confusion matrix over accuracy alone.
 
+### PD-1 GitHub-only cloud run (no local training)
+- Go to `Actions` -> `PD1 Cloud Train` -> `Run workflow`.
+- Provide `dataset_url` as a direct `.zip` or `.tar.gz` download link containing LungHist700 folder structure.
+- Optional: set repository secret `LUNGHIST700_URL` and leave input empty.
+- Artifacts are uploaded as `pd1-cloud-artifacts` and include:
+  - `evidence/public/pd1/pd1_metrics.json`
+  - `evidence/public/pd1/dataset_split_summary.json`
+
 ### PD-2 (PSPII weights from published cytokine data)
 ```bash
 python scripts/pd2_compute_pspii.py \
