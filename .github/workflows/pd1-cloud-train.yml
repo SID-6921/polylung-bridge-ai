@@ -60,7 +60,7 @@ jobs:
 
           # Convert Figshare article links with ?file=<id> into direct download links.
           if [[ "$DATASET_URL" == *"figshare.com/articles"*"file="* ]]; then
-            FILE_ID="$(python - << 'PY'
+            FILE_ID="$(DATASET_URL="$DATASET_URL" python - << 'PY'
           import os
           from urllib.parse import parse_qs, urlparse
           u = os.environ['DATASET_URL']
@@ -74,8 +74,6 @@ jobs:
           fi
 
           echo "dataset_url=$DATASET_URL" >> "$GITHUB_OUTPUT"
-        env:
-          DATASET_URL: ${{ github.event.inputs.dataset_url || secrets.LUNGHIST700_URL }}
 
       - name: Download and extract dataset
         env:
@@ -114,7 +112,7 @@ jobs:
               res = subprocess.run(["7z", "x", str(archive), f"-o{out_root}", "-y"], check=False)
               extracted = res.returncode == 0
 
-            if not extracted:
+          if not extracted:
               raise SystemExit("Unsupported archive format or extraction failure")
 
           # Auto-discover images directory by expected LungHist700 class folders.
