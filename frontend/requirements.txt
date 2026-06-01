@@ -3,3 +3,5 @@ uvicorn>=0.22.0
 streamlit>=1.25.0
 requests>=2.31.0
 python-multipart>=0.0.6
+fastapi
+httpx
