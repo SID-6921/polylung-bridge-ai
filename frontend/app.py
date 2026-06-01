@@ -1,9 +1,16 @@
 import os
-
-import requests
+import sys
 import streamlit as st
+from fastapi.testclient import TestClient
 
-API_URL = os.getenv("API_URL", "http://localhost:8000")
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+
+from scoring import app as fastapi_app
+
+
+client = TestClient(fastapi_app)
 
 st.set_page_config(page_title="PolyLung Bridge AI", layout="wide")
 st.title("PolyLung Bridge AI Dashboard")
@@ -19,7 +26,6 @@ if st.button("Analyze"):
     if uploaded is None:
         st.warning("Please upload a microscopy image first before running the analysis.")
     else:
-                
         data_payload = {
             "polyType": poly_type,          
             "particleCount": str(particle_cnt),      
@@ -29,15 +35,17 @@ if st.button("Analyze"):
         files_payload = {
             "file": (uploaded.name, uploaded.getvalue(), uploaded.type)
         }
+        
         try:
-            response = requests.post(
-                f"{API_URL}/analyze", 
-                data=data_payload, 
-                files=files_payload, 
-                timeout=15
-            )
-            response.raise_for_status()
-            data = response.json()
+            with st.spinner("Processing local engine calculation..."):
+                
+                response = client.post(
+                    "/analyze", 
+                    data=data_payload, 
+                    files=files_payload
+                )
+                response.raise_for_status()
+                data = response.json()
 
             c1, c2, c3 = st.columns(3)
             c1.metric("Polymer", data["polymer_type"])
@@ -47,7 +55,7 @@ if st.button("Analyze"):
             st.subheader("Raw Output")
             st.json(data)
         except Exception as exc:
-            st.error(f"API call failed: {exc}")
+            st.error(f"Engine processing failed: {exc}")
 
 if uploaded is not None:
-    st.info("Image received. Image upload analysis pipeline is currently offline; backend processing is using metadata inputs only.")
+    st.warning("**Notice:** The automated image-feature extraction pipeline is currently offline. The risk scoring engine is computing calculations utilizing your manual form parameter inputs only.")
