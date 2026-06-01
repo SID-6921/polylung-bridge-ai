@@ -1,10 +1,22 @@
-# PolyLung Bridge AI Dashboard
+# PolyLung Bridge-AI Module
 
-This module provides an interactive dashboard frontend paired with a high-performance FastAPI scoring backend to compute polymer-resolved lung risk metrics.
+This repository contains the refactored backend validation, configuration paths, and secrets management updates for the PolyLung Bridge-AI module.
 
-## Installation
+## 🛠️ Completed Deliverables
+1. **User Control Inputs:** Streamlit UI parameters pass dynamically to backend computations.
+2. **Pipeline Limitations Disclosure:** Added a prominent `st.warning` banner inside `frontend/app.py`.
+3. **Secret Security Management:** Erased hardcoded Census API keys; system references server environment variables.
+4. **Startup I/O Configuration:** Refactored PSPII file checker inside `scoring.py` to validate paths and cache data configurations at boot time.
+5. **Request Safety Filters:** Built complete error exception rules checking ZIP layouts, bounds, and Census timeout caps.
+6. **Testing Architecture:** Added `test_scoring.py` with automated integration assertions (3/3 tests passing).
+7. **Packaging Cleanup:** Restructured project layers and added a standard root-level `Dockerfile`.
 
-Ensure you have Python 3.9+ installed, then install the required dependencies:
+---
 
+## 🚀 Local Startup & Execution Commands
+
+To run and verify this branch immediately from the project root directory, use the following execution sequences:
+
+### 1. Run the Automated Test Engine Suite
 ```bash
-pip install -r requirements.txt
+python3 -m pytest test_scoring.py
