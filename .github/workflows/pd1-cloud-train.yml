@@ -37,6 +37,11 @@ jobs:
           pip install -r requirements-pd1.txt
           pip install -r backend/requirements.txt
 
+      - name: Install archive tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y p7zip-full
+
       - name: Resolve dataset URL
         id: ds
         env:
@@ -52,7 +57,25 @@ jobs:
             echo "No dataset URL provided. Pass workflow input 'dataset_url' or set secret LUNGHIST700_URL."
             exit 1
           fi
+
+          # Convert Figshare article links with ?file=<id> into direct download links.
+          if [[ "$DATASET_URL" == *"figshare.com/articles"*"file="* ]]; then
+            FILE_ID="$(python - << 'PY'
+          import os
+          from urllib.parse import parse_qs, urlparse
+          u = os.environ['DATASET_URL']
+          q = parse_qs(urlparse(u).query)
+          print((q.get('file') or [''])[0])
+          PY
+            )"
+            if [ -n "$FILE_ID" ]; then
+              DATASET_URL="https://ndownloader.figshare.com/files/${FILE_ID}"
+            fi
+          fi
+
           echo "dataset_url=$DATASET_URL" >> "$GITHUB_OUTPUT"
+        env:
+          DATASET_URL: ${{ github.event.inputs.dataset_url || secrets.LUNGHIST700_URL }}
 
       - name: Download and extract dataset
         env:
@@ -63,6 +86,7 @@ jobs:
           curl -L "$DATASET_URL" -o data/raw/LungHist700/dataset_archive
           python - << 'PY'
           import os
+          import subprocess
           import tarfile
           import zipfile
           from pathlib import Path
@@ -86,7 +110,12 @@ jobs:
                   extracted = False
 
           if not extracted:
-              raise SystemExit("Unsupported archive format. Use .zip or .tar.gz URL.")
+              # Fallback to 7z for rar/other container formats.
+              res = subprocess.run(["7z", "x", str(archive), f"-o{out_root}", "-y"], check=False)
+              extracted = res.returncode == 0
+
+            if not extracted:
+              raise SystemExit("Unsupported archive format or extraction failure")
 
           # Auto-discover images directory by expected LungHist700 class folders.
           required = {"nor", "aca_bd", "aca_md", "aca_pd", "scc_bd", "scc_md", "scc_pd"}
