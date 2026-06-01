@@ -12,6 +12,8 @@ st.caption("Module 1 + mock Module 2 bridge for polymer-resolved lung risk")
 uploaded = st.file_uploader("Upload microscopy image", type=["png", "jpg", "jpeg", "tif", "tiff"])
 exposure = st.selectbox("Exposure route", ["ingestion", "inhalation", "dermal"], index=0)
 zip_input = st.text_input("Enter 5-digit ZIP Code", value="32501", max_chars=5)
+poly_type = st.selectbox("Polymer Type", ["PVC", "PS", "PU", "PE", "PP", "PET", "Nylon", "Acrylic", "PC", "ABS"], index=0)
+particle_cnt = st.number_input("Particle Count", min_value=0, value=120, step=1)
 
 if st.button("Analyze"):
     if uploaded is None:
@@ -19,8 +21,8 @@ if st.button("Analyze"):
     else:
                 
         data_payload = {
-            "polyType": "PVC",          
-            "particleCount": "120",      
+            "polyType": poly_type,          
+            "particleCount": str(particle_cnt),      
             "exposRoute": exposure,
             "zipcode": zip_input,       
         }
@@ -48,4 +50,4 @@ if st.button("Analyze"):
             st.error(f"API call failed: {exc}")
 
 if uploaded is not None:
-    st.info("Image received. Current mock flow uses metadata only.")
+    st.info("Image received. Image upload analysis pipeline is currently offline; backend processing is using metadata inputs only.")

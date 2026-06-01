@@ -1,8 +1,9 @@
 import json
 from pathlib import Path
 from typing import Dict
-from fastapi import FastAPI, File, UploadFile, Form
+from fastapi import FastAPI, Body, Form, UploadFile, File, HTTPException
 import requests
+import os
 
 app = FastAPI()
 
@@ -32,7 +33,17 @@ PSPII_WEIGHTS = {
     "ABS": 2.2,
 }
 
-PSPII_FILE_PATH = Path(__file__).resolve().parents[2] / "data" / "pspii_weights_final.json"
+PSPII_FILE_PATH = Path(__file__).resolve().parent / "data" / "pspii_weights_final.json"
+
+# --- ADD THIS BLOCK RIGHT HERE ---
+try:
+    if not PSPII_FILE_PATH.exists():
+        raise FileNotFoundError(f"CRITICAL: Configuration file missing at: {PSPII_FILE_PATH}")
+    CACHED_PSPII_WEIGHTS = json.loads(PSPII_FILE_PATH.read_text(encoding="utf-8"))
+except Exception as e:
+    print(f"Startup Warning: Could not parse JSON configuration: {e}")
+    CACHED_PSPII_WEIGHTS = {}
+# ---------------------------------
 
 EXPOSURE_MULTIPLIER = {
     "inhalation": 1.5,
@@ -41,20 +52,9 @@ EXPOSURE_MULTIPLIER = {
 }
 
 
-def load_pspii_weights() -> Dict[str, float]:
-    if not PSPII_FILE_PATH.exists():
-        return PSPII_WEIGHTS
-
-    data = json.loads(PSPII_FILE_PATH.read_text(encoding="utf-8"))
-    parsed: Dict[str, float] = {}
-    for polymer, value in data.items():
-        parsed[polymer] = float(value)
-    return parsed
-
-
 def get_pspii_weight(polymer_type: str) -> float:
-    weights = load_pspii_weights()
-    return weights.get(polymer_type, 0.3)
+    # Safely reads from memory variable rather than hitting the hard drive
+    return float(CACHED_PSPII_WEIGHTS.get(polymer_type, 0.3))
 
 
 def compute_mpri(polymer_type: str, particle_count: int, exposure_route: str, income_index: float) -> float:
@@ -91,7 +91,7 @@ def build_details(polymer_type: str, exposure_route: str) -> Dict[str, float]:
     return {
         "toxicity_weight": TOXICITY_WEIGHTS.get(polymer_type, 2.0),
         "pspii_weight": get_pspii_weight(polymer_type),
-        "route_multiplier": EXPOSURE_MULTIPLIER[exposure_route],
+        "route_multiplier": EXPOSURE_MULTIPLIER[exposure_route.lower()],
     }
 
 
@@ -99,8 +99,6 @@ def build_details(polymer_type: str, exposure_route: str) -> Dict[str, float]:
 def home():
     return {"message": "PolyLung Module is Active"}
 
-
-from fastapi import FastAPI, Body 
 
 
 @app.post("/analyze")
@@ -112,6 +110,21 @@ async def calculateRisk(
     file: UploadFile = File(...)
 ):
     image_bytes = await file.read()
+    
+    # --- ADD POINT 5 VALIDATION HERE ---
+    # 1. Validate ZIP code length and digits
+    if not zipcode or len(zipcode) != 5 or not zipcode.isdigit():
+        raise HTTPException(status_code=400, detail="Invalid ZIP code. Must be exactly 5 digits.")
+
+    # 2. Validate Particle Count is non-negative
+    if particleCount < 0:
+        raise HTTPException(status_code=400, detail="Particle count cannot be negative.")
+
+    # 3. Validate Exposure Route against allowed values
+    clean_route = exposRoute.strip().lower()
+    if clean_route not in ["ingestion", "inhalation", "dermal"]:
+        raise HTTPException(status_code=400, detail="Invalid exposure route. Allowed values: ingestion, inhalation, dermal.")
+    # -----------------------------------
 
     vulnerabilityindex = 1.0  
     
@@ -124,9 +137,19 @@ async def calculateRisk(
             warningMsg = "ZIP code is not valid, setting vulnerability index to baseline 1.0."
             incomeDisplay= "Not available"
         else:
-            censusURL = f"https://api.census.gov/data/2024/acs/acs5?get=B19013_001E&for=zip%20code%20tabulation%20area:{zipcode}&key=f3e0d86d28bf98269ac3a0e3381ddec28e09793c"
-            censusResponse = requests.get(censusURL).json()
-            medianincome = int(censusResponse[1][0])
+            # Safely fetch the key from the environment variables without fallbacks
+            census_key = os.getenv("CENSUS_API_KEY")
+            
+            if not census_key:
+                warningMsg = "Census API Key missing from environment, setting vulnerability index to baseline 1.0."
+                vulnerabilityindex = 1.0
+                incomeDisplay = "Not available"
+            else:
+                censusURL = f"https://api.census.gov/data/2024/acs/acs5?get=B19013_001E&for=zip%20code%20tabulation%20area:{zipcode}&key={census_key}"
+                censusResponse = requests.get(censusURL, timeout=5).json()
+                medianincome = int(censusResponse[1][0])
+                
+                # Leave your existing "if medianincome < 0:" logic untouched right below this!
         
             
             if medianincome < 0:
@@ -159,16 +182,16 @@ async def calculateRisk(
         "polymer_type": polyType,
         "bridge_score": final_bridge_score,
         "risk_tier": assigned_tier,
-        "Warning Message": warningMsg,
-        "Particle Count": particleCount,
-        "Exposure Route": exposRoute,
-        "ZIP Code": zipcode,
+        "warning_message": warningMsg,
+        "particle_count": particleCount,
+        "exposure_route": clean_route,
+        "zip_code": zipcode,
         "internal_metrics": {
-            "MPRI Toxicity Weight": TOXICITY_WEIGHTS.get(polyType, 2.0),
-            "PSPII Lung Weight": calculated_pspii,
-            "Exposure Multiplier": EXPOSURE_MULTIPLIER.get(clean_route, 1.0),
-            "Median Area Income": incomeDisplay,
-            "Vulnerability Index": vulnerabilityindex,
-            "Calculated MPRI": calculated_mpri
+            "mpri_toxicity_weight": TOXICITY_WEIGHTS.get(polyType, 2.0),
+            "pspii_lung_weight": calculated_pspii,
+            "exposure_multiplier": EXPOSURE_MULTIPLIER.get(clean_route, 1.0),
+            "median_area_income": incomeDisplay,
+            "vulnerability_index": vulnerabilityindex,
+            "calculated_mpri": calculated_mpri
         }
     }
