@@ -35,7 +35,7 @@ PSPII_WEIGHTS = {
 
 PSPII_FILE_PATH = Path(__file__).resolve().parent / "data" / "pspii_weights_final.json"
 
-# --- ADD THIS BLOCK RIGHT HERE ---
+
 try:
     if not PSPII_FILE_PATH.exists():
         raise FileNotFoundError(f"CRITICAL: Configuration file missing at: {PSPII_FILE_PATH}")
@@ -43,7 +43,7 @@ try:
 except Exception as e:
     print(f"Startup Warning: Could not parse JSON configuration: {e}")
     CACHED_PSPII_WEIGHTS = {}
-# ---------------------------------
+
 
 EXPOSURE_MULTIPLIER = {
     "inhalation": 1.5,
@@ -53,7 +53,6 @@ EXPOSURE_MULTIPLIER = {
 
 
 def get_pspii_weight(polymer_type: str) -> float:
-    # Safely reads from memory variable rather than hitting the hard drive
     return float(CACHED_PSPII_WEIGHTS.get(polymer_type, 0.3))
 
 
@@ -111,20 +110,18 @@ async def calculateRisk(
 ):
     image_bytes = await file.read()
     
-    # --- ADD POINT 5 VALIDATION HERE ---
-    # 1. Validate ZIP code length and digits
+   
     if not zipcode or len(zipcode) != 5 or not zipcode.isdigit():
         raise HTTPException(status_code=400, detail="Invalid ZIP code. Must be exactly 5 digits.")
 
-    # 2. Validate Particle Count is non-negative
+  
     if particleCount < 0:
         raise HTTPException(status_code=400, detail="Particle count cannot be negative.")
 
-    # 3. Validate Exposure Route against allowed values
     clean_route = exposRoute.strip().lower()
     if clean_route not in ["ingestion", "inhalation", "dermal"]:
         raise HTTPException(status_code=400, detail="Invalid exposure route. Allowed values: ingestion, inhalation, dermal.")
-    # -----------------------------------
+   
 
     vulnerabilityindex = 1.0  
     
@@ -137,7 +134,7 @@ async def calculateRisk(
             warningMsg = "ZIP code is not valid, setting vulnerability index to baseline 1.0."
             incomeDisplay= "Not available"
         else:
-            # Safely fetch the key from the environment variables without fallbacks
+           
             census_key = os.getenv("CENSUS_API_KEY")
             
             if not census_key:
@@ -149,7 +146,7 @@ async def calculateRisk(
                 censusResponse = requests.get(censusURL, timeout=5).json()
                 medianincome = int(censusResponse[1][0])
                 
-                # Leave your existing "if medianincome < 0:" logic untouched right below this!
+                
         
             
             if medianincome < 0:
