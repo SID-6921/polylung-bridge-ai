@@ -125,6 +125,16 @@ jobs:
               if required.issubset(child_dirs):
                   candidates.append(p)
 
+            # Fallback: sometimes classes are nested deeper (e.g., extracted/.../data/images/<class_name>).
+            if not candidates:
+              class_parents = {}
+              for p in out_root.rglob("*"):
+                if p.is_dir() and p.name.lower() in required:
+                  class_parents.setdefault(p.parent, set()).add(p.name.lower())
+              for parent, seen in class_parents.items():
+                if required.issubset(seen):
+                  candidates.append(parent)
+
           if not candidates:
               raise SystemExit("Could not locate LungHist700 images root in extracted archive")
 
