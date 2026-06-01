@@ -13,10 +13,10 @@ Interpretation notes for current public run:
 - LungHist700 run serves as feasibility evidence for the training/evaluation stack, not a final Aim 1 polymer classifier result.
 
 Next priority:
-- Execute a GPU run with class balancing and multi-epoch training; report macro F1, per-class F1, and confusion matrix.
+- Execute a GPU run with class-balanced loss and multi-epoch training; report macro F1, per-class F1, and confusion matrix.
 
 Run:
 ```bash
 python scripts/pd1_prepare_lunghist700_binary.py --source data/raw/LungHist700/data/images --output data/lunghist700_binary --summary evidence/public/pd1/dataset_split_summary.json
-python scripts/pd1_train_swin_lunghist700.py --data-dir data/lunghist700_binary --epochs 1 --batch-size 4 --num-workers 0 --lr 1e-4 --published-baseline 0.0000 --output evidence/public/pd1/pd1_metrics.json
+python scripts/pd1_train_swin_lunghist700.py --data-dir data/lunghist700_binary --epochs 8 --batch-size 8 --num-workers 0 --lr 1e-4 --published-baseline 0.0000 --pretrained --output evidence/public/pd1/pd1_metrics.json
 ```

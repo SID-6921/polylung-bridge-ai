@@ -25,13 +25,19 @@ pip install -r requirements-pd1.txt
 ```bash
 python scripts/pd1_train_swin_lunghist700.py \
   --data-dir data/lunghist700_binary \
-  --epochs 1 \
-  --batch-size 4 \
+  --epochs 8 \
+  --batch-size 8 \
   --num-workers 0 \
   --lr 1e-4 \
   --published-baseline 0.0000 \
+  --pretrained \
   --output evidence/public/pd1/pd1_metrics.json
 ```
+
+Notes:
+- Class-balanced loss is enabled by default to reduce majority-class collapse risk.
+- Use `--disable-class-balanced-loss` only for ablation.
+- Primary report metrics are `macro_f1`, per-class F1, and confusion matrix.
 
 ## 4) Fill baseline comparison
 Update `baseline_comparison.csv` with published baseline and generated model metric.

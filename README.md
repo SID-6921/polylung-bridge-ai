@@ -70,9 +70,11 @@ python scripts/pd1_prepare_lunghist700_binary.py \
 
 python scripts/pd1_train_swin_lunghist700.py \
   --data-dir data/lunghist700_binary \
-  --epochs 1 --batch-size 4 --num-workers 0 \
+  --epochs 8 --batch-size 8 --num-workers 0 \
+  --pretrained \
   --output evidence/public/pd1/pd1_metrics.json
 ```
+PD-1 reporting should prioritize macro F1, per-class F1, and confusion matrix over accuracy alone.
 
 ### PD-2 (PSPII weights from published cytokine data)
 ```bash
