@@ -2,7 +2,7 @@
 
 This repository contains the refactored backend validation, configuration paths, and secrets management updates for the PolyLung Bridge-AI module.
 
-## 🛠️ Completed Deliverables
+## Completed Deliverables
 1. **User Control Inputs:** Streamlit UI parameters pass dynamically to backend computations.
 2. **Pipeline Limitations Disclosure:** Added a prominent `st.warning` banner inside `frontend/app.py`.
 3. **Secret Security Management:** Erased hardcoded Census API keys; system references server environment variables.
@@ -13,7 +13,7 @@ This repository contains the refactored backend validation, configuration paths,
 
 ---
 
-## 🚀 Local Startup & Execution Commands
+## Local Startup & Execution Commands
 
 To run and verify this branch immediately from the project root directory, use the following execution sequences:
 
