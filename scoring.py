@@ -189,11 +189,11 @@ async def calculateRisk(
         "exposure_route": clean_route,
         "zip_code": zipcode,
         "internal_metrics": {
-            "mpri_toxicity_weight": TOXICITY_WEIGHTS.get(polyType, 2.0),
+            "mpri_toxicity_weight": TOXICITY_WEIGHTS.get(polyType.upper().strip(), 2.0),
             "pspii_lung_weight": calculated_pspii,
             "exposure_multiplier": EXPOSURE_MULTIPLIER.get(clean_route, 1.0),
             "median_area_income": incomeDisplay,
             "vulnerability_index": vulnerabilityindex,
-            "calculated_mpri": calculated_mpri
+            "calculated_mpri": calculated_mpri  # Ensure this points to the variable
         }
     }
