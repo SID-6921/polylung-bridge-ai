@@ -194,6 +194,6 @@ async def calculateRisk(
             "exposure_multiplier": EXPOSURE_MULTIPLIER.get(clean_route, 1.0),
             "median_area_income": incomeDisplay,
             "vulnerability_index": vulnerabilityindex,
-            "calculated_mpri": calculated_mpri  # Ensure this points to the variable
+            "calculated_mpri": calculated_mpri  
         }
     }
