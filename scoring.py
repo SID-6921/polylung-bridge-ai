@@ -56,11 +56,12 @@ def get_pspii_weight(polymer_type: str) -> float:
     return float(CACHED_PSPII_WEIGHTS.get(polymer_type, 0.3))
 
 
-def compute_mpri(polymer_type: str, particle_count: int, exposure_route: str, income_index: float) -> float:
+def compute_mpri(polymer_type: str, particle_count: int, exposure_route: str) -> float:
     toxicity = TOXICITY_WEIGHTS.get(polymer_type, 2.0)
     route_mult = EXPOSURE_MULTIPLIER[exposure_route.lower()]
     count_factor = min(particle_count / 100.0, 3.0)
-    mpri_raw = toxicity * route_mult * count_factor * income_index
+    
+    mpri_raw = toxicity * route_mult * count_factor
     return round(min(mpri_raw, 25.0), 3)
 
 
@@ -71,10 +72,9 @@ def compute_pspii(polymer_type: str) -> float:
     return round(min(max(value, 0.0), 1.0), 3)
 
 
-def compute_bridge_score(mpri: float, pspii: float) -> float:
-    score = mpri * pspii * 4.0
+def compute_bridge_score(mpri: float, pspii: float, vulnerability_index: float) -> float:
+    score = mpri * pspii * vulnerability_index * 10.0
     return round(min(score, 100.0), 3)
-
 
 def risk_tier(score: float) -> str:
     if score < 15:
@@ -177,9 +177,10 @@ async def calculateRisk(
    
     clean_route = exposRoute.strip().lower()
 
-    calculated_mpri = compute_mpri(polyType, particleCount, clean_route, vulnerabilityindex)
+    calculated_mpri = compute_mpri(polyType, particleCount, clean_route)
     calculated_pspii = compute_pspii(polyType)
-    final_bridge_score = compute_bridge_score(calculated_mpri, calculated_pspii)
+    
+    final_bridge_score = compute_bridge_score(calculated_mpri, calculated_pspii, vulnerabilityindex)
     assigned_tier = risk_tier(final_bridge_score)
 
    
