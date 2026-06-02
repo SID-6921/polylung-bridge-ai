@@ -38,11 +38,10 @@ PSPII_FILE_PATH = Path(__file__).resolve().parent / "data" / "pspii_weights_fina
 
 try:
     if not PSPII_FILE_PATH.exists():
-        raise FileNotFoundError(f"CRITICAL: Configuration file missing at: {PSPII_FILE_PATH}")
+        raise FileNotFoundError()
     CACHED_PSPII_WEIGHTS = json.loads(PSPII_FILE_PATH.read_text(encoding="utf-8"))
-except Exception as e:
-    print(f"Startup Warning: Could not parse JSON configuration: {e}")
-    CACHED_PSPII_WEIGHTS = {}
+except Exception:
+    CACHED_PSPII_WEIGHTS = {k: round(v / 5.0, 3) for k, v in PSPII_WEIGHTS.items()}
 
 
 EXPOSURE_MULTIPLIER = {
@@ -53,7 +52,7 @@ EXPOSURE_MULTIPLIER = {
 
 
 def get_pspii_weight(polymer_type: str) -> float:
-    return float(CACHED_PSPII_WEIGHTS.get(polymer_type, 0.3))
+    return float(CACHED_PSPII_WEIGHTS.get(polymer_type, 0.0))
 
 
 def compute_mpri(polymer_type: str, particle_count: int, exposure_route: str) -> float:
@@ -135,7 +134,7 @@ async def calculateRisk(
             incomeDisplay = "Not available"
             vulnerabilityindex = 1.0
         else:
-            # 1. Fetch the secret key from Streamlit's environment structure
+            
             census_key = os.getenv("CENSUS_API_KEY")
             
             if not census_key:
@@ -145,17 +144,14 @@ async def calculateRisk(
             else:
                 censusURL = f"https://api.census.gov/data/2024/acs/acs5?get=B19013_001E&for=zip%20code%20tabulation%20area:{zipcode}&key={census_key}"
                 
-                # 2. Add an explicit User-Agent header so the Census servers don't block the cloud instance
                 headers = {"User-Agent": "PolyLungBridgeAI/1.0 (Contact: admin@polylung.org)"}
                 
                 response = requests.get(censusURL, headers=headers, timeout=5)
                 response.raise_for_status()
                 censusResponse = response.json()
                 
-                # Extract the income value safely
                 medianincome = int(censusResponse[1][0])
                 
-                # 3. Keep calculation logic nested safe and sound inside the success layer
                 if medianincome < 0:
                     incomeDisplay = "Not available"
                     warningMsg = "Data for this zip code is suppressed, index set to baseline."
