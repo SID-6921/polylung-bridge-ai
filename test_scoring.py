@@ -44,3 +44,58 @@ def test_negative_particle_count_safety():
         "exposRoute": "ingestion",
     }, files={"file": ("test.png", fake_image, "image/png")})
     assert response.status_code == 400
+
+def test_validation_zip_33544():
+    fake_image = io.BytesIO(b"fake image content")
+    response = client.post("/analyze", data={
+        "polyType": "PVC",
+        "particleCount": "120",
+        "zipcode": "33544",
+        "exposRoute": "ingestion",
+    }, files={"file": ("test.png", fake_image, "image/png")})
+    assert response.status_code == 200
+    assert response.json()["risk_tier"] in ["Low", "Elevated", "High", "Critical"]
+
+def test_validation_zip_32501():
+    fake_image = io.BytesIO(b"fake image content")
+    response = client.post("/analyze", data={
+        "polyType": "PVC",
+        "particleCount": "120",
+        "zipcode": "32501",
+        "exposRoute": "ingestion",
+    }, files={"file": ("test.png", fake_image, "image/png")})
+    assert response.status_code == 200
+    assert response.json()["risk_tier"] in ["Low", "Elevated", "High", "Critical"]
+
+def test_validation_zip_33602():
+    fake_image = io.BytesIO(b"fake image content")
+    response = client.post("/analyze", data={
+        "polyType": "PVC",
+        "particleCount": "120",
+        "zipcode": "33602",
+        "exposRoute": "ingestion",
+    }, files={"file": ("test.png", fake_image, "image/png")})
+    assert response.status_code == 200
+    assert response.json()["risk_tier"] in ["Low", "Elevated", "High", "Critical"]
+
+def test_validation_zip_32960():
+    fake_image = io.BytesIO(b"fake image content")
+    response = client.post("/analyze", data={
+        "polyType": "PVC",
+        "particleCount": "120",
+        "zipcode": "32960",
+        "exposRoute": "ingestion",
+    }, files={"file": ("test.png", fake_image, "image/png")})
+    assert response.status_code == 200
+    assert response.json()["risk_tier"] in ["Low", "Elevated", "High", "Critical"]
+
+def test_validation_zip_32401():
+    fake_image = io.BytesIO(b"fake image content")
+    response = client.post("/analyze", data={
+        "polyType": "PVC",
+        "particleCount": "120",
+        "zipcode": "32401",
+        "exposRoute": "ingestion",
+    }, files={"file": ("test.png", fake_image, "image/png")})
+    assert response.status_code == 200
+    assert response.json()["risk_tier"] in ["Low", "Elevated", "High", "Critical"]
