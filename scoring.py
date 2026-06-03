@@ -175,7 +175,7 @@ async def calculateRisk(
     calculated_mpri = compute_mpri(polyType, particleCount, clean_route, vulnerabilityindex)
     calculated_pspii = compute_pspii(polyType)
     
-    final_bridge_score = compute_bridge_score(calculated_mpri, calculated_pspii, 1.0)
+    final_bridge_score = compute_bridge_score(calculated_mpri, calculated_pspii, vulnerabilityindex)
     assigned_tier = risk_tier(final_bridge_score)
 
    

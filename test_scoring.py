@@ -1,6 +1,7 @@
 import pytest
 from fastapi.testclient import TestClient
 import os
+import io
 
 os.environ["CENSUS_API_KEY"] = "mock_test_key_12345"
 os.environ["PSPII_DATA_DIR"] = "./mock_data"
@@ -15,29 +16,31 @@ def test_health_check():
     assert "message" in response.json()  
 
 def test_zip_code_validation_valid():
-    payload = {
-        "zip_code": "90210",
-        "user_controls": {
-            "risk_tolerance": "medium",
-            "analysis_depth": "standard"
-        }
-    }
-    response = client.post("/score", json=payload)
-    assert response.status_code in [200, 404, 500] 
+    fake_image = io.BytesIO(b"fake image content")
+    response = client.post("/analyze", data={
+        "polyType": "PVC",
+        "particleCount": "120",
+        "zipcode": "32501",
+        "exposRoute": "ingestion",
+    }, files={"file": ("test.png", fake_image, "image/png")})
+    assert response.status_code == 200
 
 def test_invalid_zip_code_bounds():
-    payload = {
-        "zip_code": "123",  
-        "user_controls": {"risk_tolerance": "low"}
-    }
-    response = client.post("/score", json=payload)
-    assert response.status_code in [422, 404]
+    fake_image = io.BytesIO(b"fake image content")
+    response = client.post("/analyze", data={
+        "polyType": "PVC",
+        "particleCount": "120",
+        "zipcode": "123",
+        "exposRoute": "ingestion",
+    }, files={"file": ("test.png", fake_image, "image/png")})
+    assert response.status_code == 400
 
 def test_negative_particle_count_safety():
-    payload = {
-        "zip_code": "90210",
-        "particle_count": -45.2,  
-        "user_controls": {"risk_tolerance": "medium"}
-    }
-    response = client.post("/score", json=payload) 
-    assert response.status_code in [422, 400, 404]
+    fake_image = io.BytesIO(b"fake image content")
+    response = client.post("/analyze", data={
+        "polyType": "PVC",
+        "particleCount": "-10",
+        "zipcode": "32501",
+        "exposRoute": "ingestion",
+    }, files={"file": ("test.png", fake_image, "image/png")})
+    assert response.status_code == 400
