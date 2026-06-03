@@ -54,12 +54,11 @@ if st.button("Analyze"):
         if tier == "Low":
             st.success("Low Risk (score < 15) — Minimal concern. Standard monitoring recommended.")
         elif tier == "Elevated":
-            st.warning("Elevated Risk (score 15-35) — Moderate concern. Increased monitoring advised.")
+            st.warning("Elevated Risk (score 15-34) — Moderate concern. Increased monitoring advised.")
         elif tier == "High":
-            st.error("High Risk (score 35-65) — Significant concern. Immediate review recommended.")
+            st.error("High Risk (score 35-64) — Significant concern. Immediate review recommended.")
         elif tier == "Critical":
-            st.error("Critical Risk (score > 65) — Severe concern. Urgent action required.")
-
+            st.error("Critical Risk (score ≥ 65) — Severe concern. Urgent action required.")
         st.subheader("Raw Output")
         st.json(data)
 

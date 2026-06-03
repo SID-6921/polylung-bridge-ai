@@ -24,9 +24,10 @@ Bridge Score = MPRI × PSPII × Vulnerability Index × 10.0 (capped at 100.0)
 
 | Score Range | Risk Tier | Meaning |
 |-------------|-----------|---------|
-| 15 - 34 | Elevated | Moderate concern |
-| 35 - 64 | High | Significant concern |
-| ≥ 65 | Critical | Severe concern |
+| < 15 | Low | Minimal concern. Standard monitoring recommended. |
+| 15 - 34 | Elevated | Moderate concern. Increased monitoring advised. |
+| 35 - 64 | High | Significant concern. Immediate review recommended. |
+| ≥ 65 | Critical | Severe concern. Urgent action required. |
 ---
 
 ## Worked Example
