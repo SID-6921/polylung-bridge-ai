@@ -7,3 +7,4 @@ __pycache__/
 .DS_Store
 data/raw/
 data/lunghist700_binary/
+evidence/public/pd1/*.pt
