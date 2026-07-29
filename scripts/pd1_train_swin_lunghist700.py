@@ -193,9 +193,37 @@ def main() -> None:
 
     out_path = Path(args.output)
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(json.dumps(output, indent=2), encoding="utf-8")
+    out_path.write_text(
+        json.dumps(output, indent=2),
+        encoding="utf-8",
+    )
     print(f"Wrote PD-1 metrics to {out_path}")
+
+    model_output = Path(
+        "evidence/public/pd1/pd1_swin_l40s_model.pt"
+    )
+    model_output.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    torch.save(
+        {
+            "model_state_dict": model.state_dict(),
+            "class_names": train_loader.dataset.classes,
+            "epochs": args.epochs,
+            "batch_size": args.batch_size,
+            "learning_rate": args.lr,
+        },
+        model_output,
+    )
+
+    print(
+        f"Saved model checkpoint to: {model_output}"
+    )
 
 
 if __name__ == "__main__":
     main()
+
+
