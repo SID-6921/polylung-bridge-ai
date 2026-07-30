@@ -196,9 +196,15 @@ def main() -> None:
 
     model_output = Path(args.model_output)
     model_output.parent.mkdir(parents=True, exist_ok=True)
+    save_state_dict = {}
+    for key, value in model.state_dict().items():
+        if torch.is_tensor(value) and torch.is_floating_point(value):
+            save_state_dict[key] = value.detach().cpu().half()
+        else:
+            save_state_dict[key] = value.detach().cpu() if torch.is_tensor(value) else value
     torch.save(
         {
-            "model_state_dict": model.state_dict(),
+            "model_state_dict": save_state_dict,
             "class_names": class_names,
             "epochs": args.epochs,
             "batch_size": args.batch_size,

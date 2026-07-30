@@ -12,12 +12,18 @@ from torchvision.models import swin_t
 
 
 def load_model(checkpoint_path: Path, device: str):
-    checkpoint = torch.load(checkpoint_path, map_location=device)
+    try:
+        checkpoint = torch.load(checkpoint_path, map_location=device, weights_only=True)
+    except TypeError:
+        checkpoint = torch.load(checkpoint_path, map_location=device)
     class_names = checkpoint.get("class_names", []) if isinstance(checkpoint, dict) else []
     model = swin_t(weights=None)
     model.head = torch.nn.Linear(model.head.in_features, len(class_names))
     state_dict = checkpoint["model_state_dict"] if isinstance(checkpoint, dict) and "model_state_dict" in checkpoint else checkpoint
-    cleaned = {k.removeprefix("module."): v for k, v in state_dict.items()}
+    cleaned = {
+        k.removeprefix("module."): v.float() if torch.is_tensor(v) and torch.is_floating_point(v) else v
+        for k, v in state_dict.items()
+    }
     model.load_state_dict(cleaned, strict=True)
     model.to(device)
     model.eval()

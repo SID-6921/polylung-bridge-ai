@@ -10,11 +10,14 @@ from torchvision.models import swin_t
 
 DEFAULT_IMAGE_PATH = Path("data/microplastics_sem_split/val/PS")
 DEFAULT_CHECKPOINT_PATH = Path("evidence/public/pd1/microplastics_sem_swin_t.pt")
-DEFAULT_OUTPUT_PATH = Path("evidence/public/pd1/microplastics_sem_gradcam_panel.png")
+DEFAULT_OUTPUT_PATH = Path("evidence/public/pd1/microplastics_sem_explainability_panel.png")
 
 
 def load_checkpoint(model, checkpoint_path, device):
-    checkpoint = torch.load(checkpoint_path, map_location=device)
+    try:
+        checkpoint = torch.load(checkpoint_path, map_location=device, weights_only=True)
+    except TypeError:
+        checkpoint = torch.load(checkpoint_path, map_location=device)
     if isinstance(checkpoint, dict):
         if "model_state_dict" in checkpoint:
             state_dict = checkpoint["model_state_dict"]
@@ -24,7 +27,7 @@ def load_checkpoint(model, checkpoint_path, device):
             class_names = checkpoint.get("class_names", [])
         else:
             state_dict = checkpoint
-            class_names = checkpoint.get("class_names", []) if isinstance(checkpoint, dict) else []
+            class_names = checkpoint.get("class_names", [])
     else:
         state_dict = checkpoint
         class_names = []
@@ -33,7 +36,7 @@ def load_checkpoint(model, checkpoint_path, device):
     for key, value in state_dict.items():
         if key.startswith("module."):
             key = key[len("module.") :]
-        cleaned_state_dict[key] = value
+        cleaned_state_dict[key] = value.float() if torch.is_tensor(value) and torch.is_floating_point(value) else value
 
     model.load_state_dict(cleaned_state_dict, strict=True)
     return model, class_names
@@ -44,24 +47,62 @@ def resolve_image_path(path: Path) -> Path:
         return path
     if path.is_dir():
         candidates = sorted(
-            [p for p in path.rglob("*") if p.is_file() and p.suffix.lower() in {".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp", ".webp"}]
+            [
+                p
+                for p in path.rglob("*")
+                if p.is_file() and p.suffix.lower() in {".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp", ".webp"}
+            ]
         )
         if candidates:
             return candidates[0]
     raise FileNotFoundError(f"No image found at or under {path}")
 
 
-def normalize_cam(cam: np.ndarray) -> np.ndarray:
-    cam = np.maximum(cam, 0)
-    cam = cam - cam.min()
-    denom = cam.max() if cam.max() > 0 else 1.0
-    return cam / denom
+def normalize_map(values: np.ndarray) -> np.ndarray:
+    values = np.maximum(values, 0)
+    values = values - values.min()
+    if values.max() > 0:
+        values = values / values.max()
+    return values
+
+
+def predict_class_probabilities(model, input_tensor):
+    logits = model(input_tensor)
+    probs = torch.softmax(logits, dim=1)
+    pred_idx = int(torch.argmax(probs, dim=1).item())
+    pred_prob = float(probs[0, pred_idx].item())
+    return pred_idx, pred_prob
+
+
+def build_occlusion_map(model, input_tensor, pred_idx, patch_size=32, stride=16):
+    _, _, height, width = input_tensor.shape
+
+    with torch.no_grad():
+        base_prob = float(torch.softmax(model(input_tensor), dim=1)[0, pred_idx].item())
+        occlusion = np.zeros((height, width), dtype=np.float32)
+        counts = np.zeros((height, width), dtype=np.float32)
+        occlusion_value = input_tensor.mean(dim=(2, 3), keepdim=True)
+
+        for top in range(0, height, stride):
+            bottom = min(top + patch_size, height)
+            for left in range(0, width, stride):
+                right = min(left + patch_size, width)
+                perturbed = input_tensor.clone()
+                perturbed[:, :, top:bottom, left:right] = occlusion_value
+                prob = float(torch.softmax(model(perturbed), dim=1)[0, pred_idx].item())
+                drop = max(0.0, base_prob - prob)
+                occlusion[top:bottom, left:right] += drop
+                counts[top:bottom, left:right] += 1.0
+
+    counts[counts == 0] = 1.0
+    saliency = normalize_map(occlusion / counts)
+    return saliency, base_prob
 
 
 def main() -> None:
     import argparse
 
-    parser = argparse.ArgumentParser(description="Create a Grad-CAM-style explanation for the Microplastics_SEM Swin-T model")
+    parser = argparse.ArgumentParser(description="Create an occlusion-based explainability panel for the Microplastics_SEM Swin-T model")
     parser.add_argument("--image-path", default=str(DEFAULT_IMAGE_PATH), help="Image file or directory")
     parser.add_argument("--checkpoint", default=str(DEFAULT_CHECKPOINT_PATH))
     parser.add_argument("--output", default=str(DEFAULT_OUTPUT_PATH))
@@ -92,64 +133,31 @@ def main() -> None:
     )
     input_tensor = preprocess(pil_image).unsqueeze(0).to(device)
 
-    activations = {}
-    gradients = {}
+    pred_idx, pred_prob = predict_class_probabilities(model, input_tensor)
+    saliency, _ = build_occlusion_map(model, input_tensor, pred_idx)
+    saliency_img = Image.fromarray((saliency * 255).astype(np.uint8)).resize((224, 224), resample=Image.Resampling.BILINEAR)
+    saliency_np = np.asarray(saliency_img).astype(np.float32) / 255.0
 
-    def forward_hook(_, __, output):
-        activations["value"] = output.detach()
+    overlay = np.clip(0.72 * rgb_image + 0.28 * plt.get_cmap("magma")(saliency_np)[..., :3], 0, 1)
+    class_name = class_names[pred_idx] if pred_idx < len(class_names) else str(pred_idx)
 
-    def backward_hook(_, grad_input, grad_output):
-        gradients["value"] = grad_output[0].detach()
+    fig, axes = plt.subplots(1, 3, figsize=(12, 4), gridspec_kw={"wspace": 0.02, "hspace": 0.0})
+    axes[0].imshow(rgb_image)
+    axes[0].set_title(f"Input\n{image_path.name}")
+    axes[1].imshow(saliency_np, cmap="magma", vmin=0, vmax=1)
+    axes[1].set_title(f"Occlusion saliency\nPred: {class_name}")
+    axes[2].imshow(overlay)
+    axes[2].set_title(f"Overlay\nP={pred_prob:.3f}")
 
-    target_layer = model.features[-1][-1].norm2
-    forward_handle = target_layer.register_forward_hook(forward_hook)
-    backward_handle = target_layer.register_full_backward_hook(backward_hook)
+    for axis in axes:
+        axis.axis("off")
 
-    try:
-        logits = model(input_tensor)
-        pred_idx = int(torch.argmax(logits, dim=1).item())
-        score = logits[0, pred_idx]
-        model.zero_grad(set_to_none=True)
-        score.backward()
+    output_path = Path(args.output)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    plt.savefig(output_path, dpi=300, bbox_inches="tight", pad_inches=0.02)
+    plt.close(fig)
 
-        activation = activations["value"]
-        grad = gradients["value"]
-        if activation.ndim != 4:
-            raise ValueError(f"Expected 4D activation map, got {tuple(activation.shape)}")
-
-        if grad.ndim != 4:
-            raise ValueError(f"Expected 4D gradient map, got {tuple(grad.shape)}")
-
-        weights = grad.mean(dim=(2, 3), keepdim=True)
-        cam = torch.relu((weights * activation).sum(dim=1)).squeeze(0)
-        cam = cam.cpu().numpy()
-        cam = normalize_cam(cam)
-        cam_img = Image.fromarray((cam * 255).astype(np.uint8)).resize((224, 224))
-        cam_np = np.asarray(cam_img).astype(np.float32) / 255.0
-
-        overlay = np.clip(0.65 * rgb_image + 0.35 * plt.get_cmap("jet")(cam_np)[..., :3], 0, 1)
-
-        class_name = class_names[pred_idx] if pred_idx < len(class_names) else str(pred_idx)
-
-        fig, axes = plt.subplots(1, 3, figsize=(12, 4), gridspec_kw={"wspace": 0.02, "hspace": 0.0})
-        axes[0].imshow(rgb_image)
-        axes[0].set_title(f"Input\n{image_path.name}")
-        axes[1].imshow(cam_np, cmap="jet", vmin=0, vmax=1)
-        axes[1].set_title(f"Heatmap\nPred: {class_name}")
-        axes[2].imshow(overlay)
-        axes[2].set_title("Overlay")
-
-        for axis in axes:
-            axis.axis("off")
-
-        output_path = Path(args.output)
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-        plt.savefig(output_path, dpi=300, bbox_inches="tight", pad_inches=0.02)
-        plt.close(fig)
-        print(f"Saved Grad-CAM panel to: {output_path}")
-    finally:
-        forward_handle.remove()
-        backward_handle.remove()
+    print(f"Saved explainability panel to: {output_path}")
 
 
 if __name__ == "__main__":

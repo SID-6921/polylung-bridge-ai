@@ -128,7 +128,7 @@ python scripts/train_swin_imagefolder.py \
 python scripts/make_microplastics_sem_gradcam.py \
   --image-path data/microplastics_sem_split/val/PS \
   --checkpoint evidence/public/pd1/microplastics_sem_swin_t.pt \
-  --output evidence/public/pd1/microplastics_sem_gradcam_panel.png
+  --output evidence/public/pd1/microplastics_sem_explainability_panel.png
 
 python scripts/evaluate_microplastics_sem_robustness.py \
   --data-dir data/microplastics_sem_split \
@@ -136,6 +136,7 @@ python scripts/evaluate_microplastics_sem_robustness.py \
   --output evidence/public/pd1/microplastics_sem_robustness.json
 ```
 The training script converts grayscale SEM images to 3-channel input automatically, so it can fine-tune Swin-T without changing the model backbone. The standardized polymer classes currently captured from the archive are PE, PP, PS, PAN, Polyester, and Acrylates.
+The explainability panel is now occlusion-based rather than gradient-only to reduce the banding artifact you noticed.
 
 ---
 
