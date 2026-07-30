@@ -1,0 +1,38 @@
+{
+  "device": "cpu",
+  "class_names": [
+    "Acrylates",
+    "PAN",
+    "PE",
+    "PP",
+    "PS",
+    "Polyester"
+  ],
+  "variants": {
+    "clean": {
+      "accuracy": 0.5556,
+      "macro_f1": 0.3624,
+      "weighted_f1": 0.4991
+    },
+    "horizontal_flip": {
+      "accuracy": 0.5556,
+      "macro_f1": 0.3624,
+      "weighted_f1": 0.4991
+    },
+    "brightness_up": {
+      "accuracy": 0.3889,
+      "macro_f1": 0.2139,
+      "weighted_f1": 0.3269
+    },
+    "rotation_10deg": {
+      "accuracy": 0.5556,
+      "macro_f1": 0.3552,
+      "weighted_f1": 0.4871
+    },
+    "contrast_up": {
+      "accuracy": 0.5556,
+      "macro_f1": 0.3548,
+      "weighted_f1": 0.4868
+    }
+  }
+}

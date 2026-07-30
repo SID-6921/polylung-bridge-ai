@@ -111,6 +111,32 @@ python scripts/integration_benchmark.py \
 ```
 This benchmark measures API contract and overhead against a mock PSPII route, not full image-model inference latency.
 
+### Microplastics_SEM workflow
+The Microplastics_SEM archive includes filename-encoded polymer identities in the original SEM images. For the confirmed-polymer subset, use:
+```bash
+python scripts/prepare_microplastics_sem_polymers.py \
+  --archive .tmp/dataset3.zip \
+  --output data/microplastics_sem_split \
+  --summary evidence/public/pd1/microplastics_sem_split_summary.json
+
+python scripts/train_swin_imagefolder.py \
+  --data-dir data/microplastics_sem_split \
+  --epochs 8 --batch-size 8 --num-workers 0 \
+  --pretrained \
+  --output evidence/public/pd1/microplastics_sem_metrics.json
+
+python scripts/make_microplastics_sem_gradcam.py \
+  --image-path data/microplastics_sem_split/val/PS \
+  --checkpoint evidence/public/pd1/microplastics_sem_swin_t.pt \
+  --output evidence/public/pd1/microplastics_sem_gradcam_panel.png
+
+python scripts/evaluate_microplastics_sem_robustness.py \
+  --data-dir data/microplastics_sem_split \
+  --checkpoint evidence/public/pd1/microplastics_sem_swin_t.pt \
+  --output evidence/public/pd1/microplastics_sem_robustness.json
+```
+The training script converts grayscale SEM images to 3-channel input automatically, so it can fine-tune Swin-T without changing the model backbone. The standardized polymer classes currently captured from the archive are PE, PP, PS, PAN, Polyester, and Acrylates.
+
 ---
 
 ## Priority Next Steps

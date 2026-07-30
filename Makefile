@@ -32,3 +32,9 @@ pd1-prepare:
 
 pd1-train:
 	python scripts/pd1_train_swin_lunghist700.py --data-dir data/lunghist700_binary --epochs 1 --batch-size 4 --num-workers 0 --lr 1e-4 --output evidence/public/pd1/pd1_metrics.json
+
+microplastics-prepare:
+	python scripts/prepare_microplastics_sem_polymers.py --archive .tmp/dataset3.zip --output data/microplastics_sem_split --summary evidence/public/pd1/microplastics_sem_split_summary.json
+
+microplastics-train:
+	python scripts/train_swin_imagefolder.py --data-dir data/microplastics_sem_split --epochs 1 --batch-size 4 --num-workers 0 --lr 1e-4 --pretrained --output evidence/public/pd1/microplastics_sem_metrics.json

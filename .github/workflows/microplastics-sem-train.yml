@@ -1,0 +1,166 @@
+name: Microplastics SEM Train
+
+on:
+  workflow_dispatch:
+    inputs:
+      dataset_url:
+        description: "HTTP/HTTPS URL to a Microplastics_SEM archive (.zip, .tar.gz, or .rar)"
+        required: false
+        type: string
+      epochs:
+        description: "Training epochs"
+        required: false
+        default: "8"
+        type: string
+      batch_size:
+        description: "Batch size"
+        required: false
+        default: "8"
+        type: string
+
+jobs:
+  train-sem:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-pd1.txt
+          pip install -r backend/requirements.txt
+
+      - name: Install archive tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y p7zip-full
+
+      - name: Resolve dataset URL
+        id: ds
+        env:
+          INPUT_DATASET_URL: ${{ github.event.inputs.dataset_url }}
+          SECRET_DATASET_URL: ${{ secrets.MICROPLASTICS_SEM_URL }}
+        run: |
+          set -euo pipefail
+          DATASET_URL="$INPUT_DATASET_URL"
+          if [ -z "$DATASET_URL" ]; then
+            DATASET_URL="$SECRET_DATASET_URL"
+          fi
+          if [ -z "$DATASET_URL" ]; then
+            echo "No dataset URL provided. Pass workflow input 'dataset_url' or set secret MICROPLASTICS_SEM_URL."
+            exit 1
+          fi
+
+          if [[ "$DATASET_URL" == *"figshare.com/articles"*"file="* ]]; then
+            FILE_ID="$(DATASET_URL="$DATASET_URL" python - << 'PY'
+import os
+from urllib.parse import parse_qs, urlparse
+u = os.environ['DATASET_URL']
+q = parse_qs(urlparse(u).query)
+print((q.get('file') or [''])[0])
+PY
+            )"
+            if [ -n "$FILE_ID" ]; then
+              DATASET_URL="https://ndownloader.figshare.com/files/${FILE_ID}"
+            fi
+          fi
+
+          echo "dataset_url=$DATASET_URL" >> "$GITHUB_OUTPUT"
+
+      - name: Download and extract dataset
+        env:
+          DATASET_URL: ${{ steps.ds.outputs.dataset_url }}
+        run: |
+          set -euo pipefail
+          mkdir -p data/raw/Microplastics_SEM
+          curl -L "$DATASET_URL" -o data/raw/Microplastics_SEM/dataset_archive
+          python - << 'PY'
+          import subprocess
+          import tarfile
+          import zipfile
+          from pathlib import Path
+
+          archive = Path("data/raw/Microplastics_SEM/dataset_archive")
+          out_root = Path("data/raw/Microplastics_SEM/extracted")
+          out_root.mkdir(parents=True, exist_ok=True)
+
+          extracted = False
+          if zipfile.is_zipfile(archive):
+              with zipfile.ZipFile(archive) as zf:
+                  zf.extractall(out_root)
+              extracted = True
+          else:
+              try:
+                  with tarfile.open(archive) as tf:
+                      tf.extractall(out_root)
+                  extracted = True
+              except tarfile.ReadError:
+                  extracted = False
+
+          if not extracted:
+              res = subprocess.run(["7z", "x", str(archive), f"-o{out_root}", "-y"], check=False)
+              extracted = res.returncode == 0
+
+          if not extracted:
+              raise SystemExit("Unsupported archive format or extraction failure")
+
+          def has_image_files(path: Path) -> bool:
+              exts = {".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp", ".webp"}
+              return any(child.is_file() and child.suffix.lower() in exts for child in path.rglob("*"))
+
+          candidates = []
+          for p in out_root.rglob("*"):
+              if not p.is_dir():
+                  continue
+              child_dirs = [x for x in p.iterdir() if x.is_dir()]
+              class_dirs = [x for x in child_dirs if has_image_files(x)]
+              if len(class_dirs) >= 2:
+                  candidates.append(p)
+
+          if not candidates:
+              raise SystemExit("Could not locate an image-folder root in the extracted archive")
+
+          chosen = sorted(candidates, key=lambda x: len(str(x)))[0]
+          Path("data/raw/Microplastics_SEM/images_root.txt").write_text(str(chosen), encoding="utf-8")
+          print(f"Resolved images root: {chosen}")
+          PY
+
+      - name: Prepare train/val split
+        run: |
+          set -euo pipefail
+          python scripts/prepare_microplastics_sem_polymers.py \
+            --archive data/raw/Microplastics_SEM/dataset_archive \
+            --output data/microplastics_sem_split \
+            --summary evidence/public/pd1/microplastics_sem_split_summary.json
+
+      - name: Train SEM classifier
+        run: |
+          set -euo pipefail
+          python scripts/train_swin_imagefolder.py \
+            --data-dir data/microplastics_sem_split \
+            --epochs "${{ github.event.inputs.epochs || '8' }}" \
+            --batch-size "${{ github.event.inputs.batch_size || '8' }}" \
+            --num-workers 0 \
+            --lr 1e-4 \
+            --pretrained \
+            --output evidence/public/pd1/microplastics_sem_metrics.json
+
+      - name: Run tests
+        run: |
+          set -euo pipefail
+          PYTHONPATH=backend pytest -q
+
+      - name: Upload SEM artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: microplastics-sem-artifacts
+          path: |
+            evidence/public/pd1/microplastics_sem_metrics.json
+            evidence/public/pd1/microplastics_sem_split_summary.json

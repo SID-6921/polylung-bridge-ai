@@ -1,0 +1,35 @@
+{
+  "archive": ".tmp\\dataset3.zip",
+  "classes": {
+    "Acrylates": {
+      "total": 51,
+      "train": 41,
+      "val": 10
+    },
+    "PAN": {
+      "total": 20,
+      "train": 16,
+      "val": 4
+    },
+    "PE": {
+      "total": 12,
+      "train": 10,
+      "val": 2
+    },
+    "PP": {
+      "total": 10,
+      "train": 8,
+      "val": 2
+    },
+    "PS": {
+      "total": 41,
+      "train": 33,
+      "val": 8
+    },
+    "Polyester": {
+      "total": 54,
+      "train": 44,
+      "val": 10
+    }
+  }
+}
