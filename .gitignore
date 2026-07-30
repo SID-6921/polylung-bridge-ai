@@ -7,4 +7,6 @@ __pycache__/
 .DS_Store
 data/raw/
 data/lunghist700_binary/
+data/microplastics_sem_split/
+.tmp/
 evidence/public/pd1/*.pt

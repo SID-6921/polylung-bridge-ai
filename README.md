@@ -137,6 +137,7 @@ python scripts/evaluate_microplastics_sem_robustness.py \
 ```
 The training script converts grayscale SEM images to 3-channel input automatically, so it can fine-tune Swin-T without changing the model backbone. The standardized polymer classes currently captured from the archive are PE, PP, PS, PAN, Polyester, and Acrylates.
 The explainability panel is now occlusion-based rather than gradient-only to reduce the banding artifact you noticed.
+The trained SEM checkpoint is reproducible from the script outputs and is intentionally not tracked in Git to keep the branch lightweight.
 
 ---
 
