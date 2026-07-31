@@ -1,0 +1,209 @@
+{
+  "model": "efficientnet_b0",
+  "task": "SEM particle SHAPE classification (fibre/bead/fragment) - preliminary pilot, not a validated classifier",
+  "device": "cuda",
+  "epochs": 8,
+  "batch_size": 16,
+  "learning_rate": 0.0001,
+  "class_balanced_loss": true,
+  "classes": [
+    "bead",
+    "fibre",
+    "fragment"
+  ],
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.9622,
+      "val_accuracy": 0.8056,
+      "val_macro_f1": 0.7953
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.5691,
+      "val_accuracy": 0.9722,
+      "val_macro_f1": 0.9762
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.4241,
+      "val_accuracy": 0.9722,
+      "val_macro_f1": 0.9762
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.2758,
+      "val_accuracy": 0.9722,
+      "val_macro_f1": 0.9762
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.1788,
+      "val_accuracy": 0.9722,
+      "val_macro_f1": 0.9762
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.1083,
+      "val_accuracy": 1.0,
+      "val_macro_f1": 1.0
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.0797,
+      "val_accuracy": 1.0,
+      "val_macro_f1": 1.0
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.1056,
+      "val_accuracy": 1.0,
+      "val_macro_f1": 1.0
+    }
+  ],
+  "val_metrics": {
+    "accuracy": 1.0,
+    "macro_f1": 1.0,
+    "per_class_f1": {
+      "bead": 1.0,
+      "fibre": 1.0,
+      "fragment": 1.0
+    },
+    "classification_report": {
+      "bead": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 8.0
+      },
+      "fibre": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 14.0
+      },
+      "fragment": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 14.0
+      },
+      "accuracy": 1.0,
+      "macro avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 36.0
+      },
+      "weighted avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 36.0
+      }
+    },
+    "confusion_matrix": {
+      "labels": [
+        "bead",
+        "fibre",
+        "fragment"
+      ],
+      "matrix": [
+        [
+          8,
+          0,
+          0
+        ],
+        [
+          0,
+          14,
+          0
+        ],
+        [
+          0,
+          0,
+          14
+        ]
+      ]
+    },
+    "auc_per_class": {
+      "bead": 1.0,
+      "fibre": 1.0,
+      "fragment": 1.0
+    },
+    "mean_auc": 1.0
+  },
+  "test_metrics": {
+    "accuracy": 1.0,
+    "macro_f1": 1.0,
+    "per_class_f1": {
+      "bead": 1.0,
+      "fibre": 1.0,
+      "fragment": 1.0
+    },
+    "classification_report": {
+      "bead": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 7.0
+      },
+      "fibre": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 13.0
+      },
+      "fragment": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 15.0
+      },
+      "accuracy": 1.0,
+      "macro avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 35.0
+      },
+      "weighted avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 35.0
+      }
+    },
+    "confusion_matrix": {
+      "labels": [
+        "bead",
+        "fibre",
+        "fragment"
+      ],
+      "matrix": [
+        [
+          7,
+          0,
+          0
+        ],
+        [
+          0,
+          13,
+          0
+        ],
+        [
+          0,
+          0,
+          15
+        ]
+      ]
+    },
+    "auc_per_class": {
+      "bead": 1.0,
+      "fibre": 1.0,
+      "fragment": 1.0
+    },
+    "mean_auc": 1.0
+  },
+  "roc_curve_png": "evidence/public/sem_shape/roc_curves/roc_efficientnet.png"
+}

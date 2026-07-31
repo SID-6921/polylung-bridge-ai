@@ -1,0 +1,36 @@
+{
+  "model": "swin_t",
+  "n_test_images": 35,
+  "results": {
+    "clean": {
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "accuracy_delta_vs_clean": 0.0
+    },
+    "horizontal_flip": {
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "accuracy_delta_vs_clean": 0.0
+    },
+    "brightness_jitter": {
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "accuracy_delta_vs_clean": 0.0
+    },
+    "rotation_15": {
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "accuracy_delta_vs_clean": 0.0
+    },
+    "rotation_neg15": {
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "accuracy_delta_vs_clean": 0.0
+    },
+    "contrast_jitter": {
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "accuracy_delta_vs_clean": 0.0
+    }
+  }
+}

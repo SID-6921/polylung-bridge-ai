@@ -1,0 +1,94 @@
+{
+  "task": "SEM particle-morphology (SHAPE) classification -- PRODUCT/SESSION-GROUPED split. Fixes leakage in the original stratified split; see evidence/public/sem_shape/data_leakage_notes.md.",
+  "split_method": "manual whole-group assignment; no source product/imaging-session appears in more than one split",
+  "source_dirs_used": {
+    "fibre": [
+      "fibre/fibre_1/image",
+      "fibre/fibre_2/image"
+    ],
+    "bead": [
+      "bead/bead/image"
+    ],
+    "fragment": [
+      "fragment/fragment_1/image",
+      "fragment/fragment_2/image"
+    ]
+  },
+  "group_split_assignment": {
+    "fibre:polyester": "train",
+    "fibre:PP": "train",
+    "fibre:PE": "val",
+    "fibre:PAN": "test",
+    "fragment:PS_Isopropyl_Alcohol_Suspension": "train",
+    "fragment:Particle_No": "train",
+    "fragment:Particle_2_No": "val",
+    "fragment:Foam_No": "test",
+    "bead:Dove_men_acrylates_copolymer_microbeads": "train"
+  },
+  "groups_per_class_per_split": {
+    "train": {
+      "fibre": [
+        "PP",
+        "polyester"
+      ],
+      "bead": [
+        "Dove_men_acrylates_copolymer_microbeads"
+      ],
+      "fragment": [
+        "PS_Isopropyl_Alcohol_Suspension",
+        "Particle_No"
+      ]
+    },
+    "val": {
+      "fibre": [
+        "PE"
+      ],
+      "bead": [],
+      "fragment": [
+        "Particle_2_No"
+      ]
+    },
+    "test": {
+      "fibre": [
+        "PAN"
+      ],
+      "bead": [],
+      "fragment": [
+        "Foam_No"
+      ]
+    }
+  },
+  "bead_holdout_note": "bead has exactly 1 source product (Dove_men_acrylates_copolymer_microbeads) in the entire dataset. A grouped/held-out split cannot put any bead images in val or test without violating group integrity (reusing the same session in train and eval, i.e. reintroducing the original leakage). All 51 bead images are therefore in train only; bead CANNOT be evaluated on held-out data with this dataset as-is. This is itself evidence that more source diversity is needed before shape classification (specifically for beads) can be validated. Because of this, val/test in this split are effectively a 2-class (fibre vs fragment) held-out evaluation -- both of those classes have >=1 group held out per split -- and should be read that way.",
+  "duplicate_files_removed": 0,
+  "total_after_dedup": 237,
+  "raw_file_counts_before_dedup": {
+    "fibre": 90,
+    "bead": 51,
+    "fragment": 96
+  },
+  "counts_per_class_per_split": {
+    "train": {
+      "fibre": 58,
+      "bead": 51,
+      "fragment": 69
+    },
+    "val": {
+      "fibre": 12,
+      "fragment": 15
+    },
+    "test": {
+      "fibre": 20,
+      "fragment": 12
+    }
+  },
+  "total_per_split": {
+    "train": 178,
+    "val": 27,
+    "test": 32
+  },
+  "actual_split_ratio": {
+    "train": 0.7511,
+    "val": 0.1139,
+    "test": 0.135
+  }
+}

@@ -10,3 +10,7 @@ data/lunghist700_binary/
 data/microplastics_sem_split/
 .tmp/
 evidence/public/pd1/*.pt
+data/microplastics_datasets/
+evidence/public/sem_shape/*.pt
+evidence/public/sem_shape_grouped/*.pt
+logs/

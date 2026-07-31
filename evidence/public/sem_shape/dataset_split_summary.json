@@ -1,0 +1,55 @@
+{
+  "task": "SEM particle-morphology (SHAPE) classification pilot: fibre vs bead vs fragment. NOT polymer/chemical classification -- Toronto dataset has no FTIR/chemical labels.",
+  "seed": 42,
+  "split_ratios": {
+    "train": 0.7,
+    "val": 0.15,
+    "test": 0.15
+  },
+  "source_dirs_used": {
+    "fibre": [
+      "fibre/fibre_1/image",
+      "fibre/fibre_2/image"
+    ],
+    "bead": [
+      "bead/bead/image"
+    ],
+    "fragment": [
+      "fragment/fragment_1/image",
+      "fragment/fragment_2/image"
+    ]
+  },
+  "excluded": [
+    "original_image_* raw folders (unprocessed full micrographs, no usable per-image annotation used here)",
+    "fibre_1crop / fibre_2crop per-particle 512x512 crops (no equivalent crop set exists for bead/fragment; mixing crop-level fibre samples with frame-level bead/fragment samples would confound shape with image granularity, so all 3 classes use full-frame annotated micrographs for consistency)"
+  ],
+  "raw_file_counts_before_dedup": {
+    "fibre": 90,
+    "bead": 51,
+    "fragment": 96
+  },
+  "duplicate_files_removed": 0,
+  "total_after_dedup": 237,
+  "counts_per_class_per_split": {
+    "train": {
+      "fibre": 63,
+      "bead": 36,
+      "fragment": 67
+    },
+    "val": {
+      "fibre": 14,
+      "bead": 8,
+      "fragment": 14
+    },
+    "test": {
+      "fibre": 13,
+      "bead": 7,
+      "fragment": 15
+    }
+  },
+  "total_per_split": {
+    "train": 166,
+    "val": 36,
+    "test": 35
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "task": "SEM particle SHAPE classification (fibre/bead/fragment) pilot -- NOT polymer classification",
+  "validity_warning": "All three models below achieve near-identical, essentially perfect scores (~1.0 across accuracy/macro-F1/AUC on both val and test, and under every robustness perturbation tested). This should NOT be attributed to genuine shape-classification capability. Diagnostic work in evidence/public/sem_shape/data_leakage_notes.md shows each class is drawn from a small, near-disjoint set of source products/imaging sessions that is shared identically across train/val/test (e.g. bead = a single product/session in every split), so models can key on session-level nuisance signal (background, resolution, scale-bar/session artifacts) rather than particle morphology. A trivial RandomForest trained on ONLY [width, height, aspect_ratio] (no pixels) reaches 77% accuracy -- well above the 40% majority baseline but short of 100%, confirming dimensions are a partial but not sole confound; the remainder is attributed to the session confound. Zero exact-duplicate files were found across splits (proper file-level dedup), but that does not rule out the session-level leakage described above. These numbers must NOT be cited as evidence of shape or polymer classification capability in the STTR application without first addressing this via a product/session-held-out split.",
+  "models": {
+    "swin_t": {
+      "val_accuracy": 1.0,
+      "val_macro_f1": 1.0,
+      "val_mean_auc": 1.0,
+      "test_accuracy": 1.0,
+      "test_macro_f1": 1.0,
+      "test_mean_auc": 1.0
+    },
+    "resnet50": {
+      "val_accuracy": 1.0,
+      "val_macro_f1": 1.0,
+      "val_mean_auc": 1.0,
+      "test_accuracy": 1.0,
+      "test_macro_f1": 1.0,
+      "test_mean_auc": 1.0
+    },
+    "efficientnet_b0": {
+      "val_accuracy": 1.0,
+      "val_macro_f1": 1.0,
+      "val_mean_auc": 1.0,
+      "test_accuracy": 1.0,
+      "test_macro_f1": 1.0,
+      "test_mean_auc": 1.0
+    }
+  },
+  "trivial_dimension_only_baseline": {
+    "description": "RandomForest on [width, height, width/height] only, no pixel data, same split",
+    "val_accuracy": 0.7778,
+    "val_macro_f1": 0.5926,
+    "test_accuracy": 0.7714,
+    "test_macro_f1": 0.5726
+  },
+  "robustness_swin_t": "See robustness_results.json: 100% accuracy under all perturbations (flip, brightness, rotation +-15, contrast) -- zero degradation, consistent with shortcut learning rather than genuine morphology sensitivity.",
+  "see_also": [
+    "evidence/public/sem_shape/data_leakage_notes.md",
+    "evidence/public/sem_shape/dataset_split_summary.json",
+    "evidence/public/sem_shape/robustness_results.json",
+    "evidence/public/sem_shape/gradcam/"
+  ]
+}
