@@ -101,5 +101,56 @@ os.makedirs(out_dir, exist_ok=True)
 with open(os.path.join(out_dir, "spectral_classifier_metrics.json"), "w") as fh:
     json.dump(results, fh, indent=2, default=str)
 
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+from sklearn.metrics import ConfusionMatrixDisplay, roc_curve, auc
+from itertools import cycle
+
+# confusion matrix plot (internal FLOPP test set)
+cm = np.array(results["flopp_internal_test"]["confusion_matrix"]["matrix"])
+cm_labels = results["flopp_internal_test"]["confusion_matrix"]["labels"]
+fig, ax = plt.subplots(figsize=(9, 8))
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=cm_labels)
+disp.plot(ax=ax, cmap="Blues", colorbar=True, xticks_rotation=45)
+ax.set_title(f"FLOPP spectral classifier — confusion matrix (held-out test, n={sum(sum(r) for r in cm)})")
+plt.tight_layout()
+plt.savefig(os.path.join(out_dir, "confusion_matrix_flopp_test.png"), dpi=150)
+plt.close()
+
+# ROC curves, one-vs-rest, internal FLOPP test set
+proba_te = clf.predict_proba(Xte)
+yte_bin = label_binarize(yte, classes=classes)
+fig, ax = plt.subplots(figsize=(8, 7))
+colors = cycle(plt.cm.tab20.colors)
+for i, (cls, color) in enumerate(zip(classes, colors)):
+    if yte_bin[:, i].sum() == 0:
+        continue
+    fpr, tpr, _ = roc_curve(yte_bin[:, i], proba_te[:, i])
+    roc_auc = auc(fpr, tpr)
+    ax.plot(fpr, tpr, color=color, lw=1.5, label=f"{cls} (AUC={roc_auc:.2f})")
+ax.plot([0, 1], [0, 1], "k--", lw=1)
+ax.set_xlabel("False Positive Rate")
+ax.set_ylabel("True Positive Rate")
+ax.set_title(f"FLOPP spectral classifier — ROC (one-vs-rest, held-out test, macro AUC={results['flopp_internal_test']['macro_auc_ovr']:.3f})")
+ax.legend(loc="lower right", fontsize=7, ncol=2)
+plt.tight_layout()
+plt.savefig(os.path.join(out_dir, "roc_flopp_test.png"), dpi=150)
+plt.close()
+
+# confusion matrix for FLOPP-e external validation, if present
+if "flopp_e_external_validation" in results:
+    cm_e = np.array(results["flopp_e_external_validation"]["confusion_matrix"]["matrix"])
+    cm_e_labels = results["flopp_e_external_validation"]["confusion_matrix"]["labels"]
+    fig, ax = plt.subplots(figsize=(9, 8))
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm_e, display_labels=cm_e_labels)
+    disp.plot(ax=ax, cmap="Oranges", colorbar=True, xticks_rotation=45)
+    ax.set_title("FLOPP-trained model — confusion matrix on FLOPP-e (weathered, external validation)")
+    plt.tight_layout()
+    plt.savefig(os.path.join(out_dir, "confusion_matrix_floppe_external.png"), dpi=150)
+    plt.close()
+
+print("PLOTS_SAVED")
+
 print(json.dumps({k: {kk: vv for kk, vv in v.items() if kk in ("accuracy","macro_f1","macro_auc_ovr","n")} for k, v in results.items() if isinstance(v, dict) and "accuracy" in v}, indent=2))
 print("DONE")
