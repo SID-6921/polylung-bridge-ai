@@ -60,12 +60,12 @@ jobs:
 
           if [[ "$DATASET_URL" == *"figshare.com/articles"*"file="* ]]; then
             FILE_ID="$(DATASET_URL="$DATASET_URL" python - << 'PY'
-import os
-from urllib.parse import parse_qs, urlparse
-u = os.environ['DATASET_URL']
-q = parse_qs(urlparse(u).query)
-print((q.get('file') or [''])[0])
-PY
+            import os
+            from urllib.parse import parse_qs, urlparse
+            u = os.environ['DATASET_URL']
+            q = parse_qs(urlparse(u).query)
+            print((q.get('file') or [''])[0])
+            PY
             )"
             if [ -n "$FILE_ID" ]; then
               DATASET_URL="https://ndownloader.figshare.com/files/${FILE_ID}"
