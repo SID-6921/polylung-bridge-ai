@@ -1,0 +1,342 @@
+{
+  "task": "Improved Swin-T SEM shape classifier: small LR sweep + early stopping on val macro-F1",
+  "device": "cuda",
+  "max_epochs": 30,
+  "patience": 5,
+  "lrs_tried": [
+    3e-05,
+    0.0001,
+    0.0003
+  ],
+  "sweep_results": [
+    {
+      "lr": 3e-05,
+      "best_epoch": 2,
+      "epochs_run": 7,
+      "best_val_macro_f1": 1.0,
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 0.8193,
+          "val_accuracy": 0.9444,
+          "val_macro_f1": 0.9433
+        },
+        {
+          "epoch": 2,
+          "train_loss": 0.1856,
+          "val_accuracy": 1.0,
+          "val_macro_f1": 1.0
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.0528,
+          "val_accuracy": 1.0,
+          "val_macro_f1": 1.0
+        },
+        {
+          "epoch": 4,
+          "train_loss": 0.0188,
+          "val_accuracy": 1.0,
+          "val_macro_f1": 1.0
+        },
+        {
+          "epoch": 5,
+          "train_loss": 0.0142,
+          "val_accuracy": 0.9722,
+          "val_macro_f1": 0.9762
+        },
+        {
+          "epoch": 6,
+          "train_loss": 0.0079,
+          "val_accuracy": 1.0,
+          "val_macro_f1": 1.0
+        },
+        {
+          "epoch": 7,
+          "train_loss": 0.0133,
+          "val_accuracy": 1.0,
+          "val_macro_f1": 1.0
+        }
+      ]
+    },
+    {
+      "lr": 0.0001,
+      "best_epoch": 2,
+      "epochs_run": 7,
+      "best_val_macro_f1": 1.0,
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 0.4307,
+          "val_accuracy": 0.9722,
+          "val_macro_f1": 0.9762
+        },
+        {
+          "epoch": 2,
+          "train_loss": 0.0129,
+          "val_accuracy": 1.0,
+          "val_macro_f1": 1.0
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.0097,
+          "val_accuracy": 1.0,
+          "val_macro_f1": 1.0
+        },
+        {
+          "epoch": 4,
+          "train_loss": 0.003,
+          "val_accuracy": 1.0,
+          "val_macro_f1": 1.0
+        },
+        {
+          "epoch": 5,
+          "train_loss": 0.0005,
+          "val_accuracy": 1.0,
+          "val_macro_f1": 1.0
+        },
+        {
+          "epoch": 6,
+          "train_loss": 0.0005,
+          "val_accuracy": 1.0,
+          "val_macro_f1": 1.0
+        },
+        {
+          "epoch": 7,
+          "train_loss": 0.0002,
+          "val_accuracy": 1.0,
+          "val_macro_f1": 1.0
+        }
+      ]
+    },
+    {
+      "lr": 0.0003,
+      "best_epoch": 7,
+      "epochs_run": 12,
+      "best_val_macro_f1": 1.0,
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 0.3025,
+          "val_accuracy": 0.8611,
+          "val_macro_f1": 0.8564
+        },
+        {
+          "epoch": 2,
+          "train_loss": 0.2831,
+          "val_accuracy": 0.8611,
+          "val_macro_f1": 0.854
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.0887,
+          "val_accuracy": 0.9722,
+          "val_macro_f1": 0.9762
+        },
+        {
+          "epoch": 4,
+          "train_loss": 0.0231,
+          "val_accuracy": 0.9722,
+          "val_macro_f1": 0.9762
+        },
+        {
+          "epoch": 5,
+          "train_loss": 0.0333,
+          "val_accuracy": 0.9444,
+          "val_macro_f1": 0.9524
+        },
+        {
+          "epoch": 6,
+          "train_loss": 0.0383,
+          "val_accuracy": 0.9167,
+          "val_macro_f1": 0.9074
+        },
+        {
+          "epoch": 7,
+          "train_loss": 0.1059,
+          "val_accuracy": 1.0,
+          "val_macro_f1": 1.0
+        },
+        {
+          "epoch": 8,
+          "train_loss": 0.022,
+          "val_accuracy": 1.0,
+          "val_macro_f1": 1.0
+        },
+        {
+          "epoch": 9,
+          "train_loss": 0.0148,
+          "val_accuracy": 0.9722,
+          "val_macro_f1": 0.968
+        },
+        {
+          "epoch": 10,
+          "train_loss": 0.0229,
+          "val_accuracy": 0.9167,
+          "val_macro_f1": 0.9074
+        },
+        {
+          "epoch": 11,
+          "train_loss": 0.1245,
+          "val_accuracy": 0.9722,
+          "val_macro_f1": 0.9762
+        },
+        {
+          "epoch": 12,
+          "train_loss": 0.2555,
+          "val_accuracy": 0.9444,
+          "val_macro_f1": 0.9521
+        }
+      ]
+    }
+  ],
+  "selected_lr": 3e-05,
+  "selected_best_epoch": 2,
+  "selection_criterion": "best val macro-F1 across sweep (NOT external test data)",
+  "final_val_metrics": {
+    "accuracy": 1.0,
+    "macro_f1": 1.0,
+    "per_class_f1": {
+      "bead": 1.0,
+      "fibre": 1.0,
+      "fragment": 1.0
+    },
+    "classification_report": {
+      "bead": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 8.0
+      },
+      "fibre": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 14.0
+      },
+      "fragment": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 14.0
+      },
+      "accuracy": 1.0,
+      "macro avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 36.0
+      },
+      "weighted avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 36.0
+      }
+    },
+    "confusion_matrix": {
+      "labels": [
+        "bead",
+        "fibre",
+        "fragment"
+      ],
+      "matrix": [
+        [
+          8,
+          0,
+          0
+        ],
+        [
+          0,
+          14,
+          0
+        ],
+        [
+          0,
+          0,
+          14
+        ]
+      ]
+    },
+    "auc_per_class": {
+      "bead": 1.0,
+      "fibre": 1.0,
+      "fragment": 1.0
+    },
+    "mean_auc": 1.0
+  },
+  "final_test_metrics": {
+    "accuracy": 1.0,
+    "macro_f1": 1.0,
+    "per_class_f1": {
+      "bead": 1.0,
+      "fibre": 1.0,
+      "fragment": 1.0
+    },
+    "classification_report": {
+      "bead": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 7.0
+      },
+      "fibre": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 13.0
+      },
+      "fragment": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 15.0
+      },
+      "accuracy": 1.0,
+      "macro avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 35.0
+      },
+      "weighted avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 35.0
+      }
+    },
+    "confusion_matrix": {
+      "labels": [
+        "bead",
+        "fibre",
+        "fragment"
+      ],
+      "matrix": [
+        [
+          7,
+          0,
+          0
+        ],
+        [
+          0,
+          13,
+          0
+        ],
+        [
+          0,
+          0,
+          15
+        ]
+      ]
+    },
+    "auc_per_class": {
+      "bead": 1.0,
+      "fibre": 1.0,
+      "fragment": 1.0
+    },
+    "mean_auc": 1.0
+  },
+  "checkpoint": "evidence/public/sem_shape_improved/sem_shape_swin_t_improved_model.pt",
+  "roc_curve_png": "evidence/public/sem_shape_improved/roc_curve_swin_t_improved.png"
+}

@@ -14,3 +14,5 @@ data/microplastics_datasets/
 evidence/public/sem_shape/*.pt
 evidence/public/sem_shape_grouped/*.pt
 logs/
+evidence/public/sem_shape_improved/*.pt
+evidence/public/sem_shape_improved/train.log
