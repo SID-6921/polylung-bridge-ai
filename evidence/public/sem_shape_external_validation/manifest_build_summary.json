@@ -1,0 +1,31 @@
+{
+  "label_counts": {
+    "fragment": 379,
+    "fibre": 311,
+    "bead": 7
+  },
+  "excluded_shape_values": {
+    "FILM": 23
+  },
+  "classification_column_counts_all_rows": {
+    "YES": 715,
+    "NO": 57,
+    "LIKELY": 66,
+    "OTHER": 0
+  },
+  "missing_png_after_filters": 13,
+  "total_manifest_size": 697,
+  "sheet_to_folder_mapping": {
+    "WWTP1.1": "1_WWTP1",
+    "WWTP1.2": "2_WWTP1",
+    "WWTP1.3": "3_WWTP1",
+    "WWTP1.4": "4_WWTP1",
+    "WWTP1.5": "5_WWTP1",
+    "WWTP2.1": "1_WWTP2",
+    "WWTP2.2": "2_WWTP2",
+    "WWTP2.3": "3_WWTP2",
+    "WWTP2.4": "4_WTTP2",
+    "WWTP2.5": "5_WWTP2"
+  },
+  "classification_filter_applied": "YES only"
+}

@@ -1,0 +1,70 @@
+{
+  "accuracy": 0.5624,
+  "macro_f1": 0.3614,
+  "classification_report": {
+    "bead": {
+      "precision": 0.037037037037037035,
+      "recall": 0.2857142857142857,
+      "f1-score": 0.06557377049180328,
+      "support": 7.0
+    },
+    "fibre": {
+      "precision": 0.6274509803921569,
+      "recall": 0.2057877813504823,
+      "f1-score": 0.3099273607748184,
+      "support": 311.0
+    },
+    "fragment": {
+      "precision": 0.6025878003696857,
+      "recall": 0.8601583113456465,
+      "f1-score": 0.7086956521739131,
+      "support": 379.0
+    },
+    "accuracy": 0.5624103299856528,
+    "macro avg": {
+      "precision": 0.4223586059329598,
+      "recall": 0.45055345947013814,
+      "f1-score": 0.36139892781351163,
+      "support": 697.0
+    },
+    "weighted avg": {
+      "precision": 0.6080018515083657,
+      "recall": 0.5624103299856528,
+      "f1-score": 0.5243071417049128,
+      "support": 697.0
+    }
+  },
+  "confusion_matrix": {
+    "labels": [
+      "bead",
+      "fibre",
+      "fragment"
+    ],
+    "matrix": [
+      [
+        2,
+        1,
+        4
+      ],
+      [
+        36,
+        64,
+        211
+      ],
+      [
+        16,
+        37,
+        326
+      ]
+    ]
+  },
+  "n_samples": 697,
+  "model": "efficientnet_b0",
+  "checkpoint": "evidence/public/sem_shape/sem_shape_efficientnet_model.pt",
+  "device": "cuda",
+  "classes": [
+    "bead",
+    "fibre",
+    "fragment"
+  ]
+}

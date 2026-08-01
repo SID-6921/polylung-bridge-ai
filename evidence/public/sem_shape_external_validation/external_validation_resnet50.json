@@ -1,0 +1,70 @@
+{
+  "accuracy": 0.528,
+  "macro_f1": 0.2306,
+  "classification_report": {
+    "bead": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 7.0
+    },
+    "fibre": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 311.0
+    },
+    "fragment": {
+      "precision": 0.5372262773722628,
+      "recall": 0.9709762532981531,
+      "f1-score": 0.6917293233082706,
+      "support": 379.0
+    },
+    "accuracy": 0.5279770444763271,
+    "macro avg": {
+      "precision": 0.17907542579075428,
+      "recall": 0.32365875109938436,
+      "f1-score": 0.23057644110275688,
+      "support": 697.0
+    },
+    "weighted avg": {
+      "precision": 0.29212160562996786,
+      "recall": 0.5279770444763271,
+      "f1-score": 0.37613402228670667,
+      "support": 697.0
+    }
+  },
+  "confusion_matrix": {
+    "labels": [
+      "bead",
+      "fibre",
+      "fragment"
+    ],
+    "matrix": [
+      [
+        0,
+        0,
+        7
+      ],
+      [
+        1,
+        0,
+        310
+      ],
+      [
+        10,
+        1,
+        368
+      ]
+    ]
+  },
+  "n_samples": 697,
+  "model": "resnet50",
+  "checkpoint": "evidence/public/sem_shape/sem_shape_resnet50_model.pt",
+  "device": "cuda",
+  "classes": [
+    "bead",
+    "fibre",
+    "fragment"
+  ]
+}

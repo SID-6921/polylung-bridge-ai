@@ -1,0 +1,70 @@
+{
+  "accuracy": 0.6743,
+  "macro_f1": 0.5059,
+  "classification_report": {
+    "bead": {
+      "precision": 0.02631578947368421,
+      "recall": 0.42857142857142855,
+      "f1-score": 0.049586776859504134,
+      "support": 7.0
+    },
+    "fibre": {
+      "precision": 0.7475728155339806,
+      "recall": 0.7427652733118971,
+      "f1-score": 0.7451612903225806,
+      "support": 311.0
+    },
+    "fragment": {
+      "precision": 0.8613138686131386,
+      "recall": 0.6226912928759895,
+      "f1-score": 0.7228177641653905,
+      "support": 379.0
+    },
+    "accuracy": 0.6743185078909613,
+    "macro avg": {
+      "precision": 0.5450674912069345,
+      "recall": 0.5980093315864384,
+      "f1-score": 0.505855277115825,
+      "support": 697.0
+    },
+    "weighted avg": {
+      "precision": 0.8021769187399761,
+      "recall": 0.6743185078909613,
+      "f1-score": 0.7260261138407776,
+      "support": 697.0
+    }
+  },
+  "confusion_matrix": {
+    "labels": [
+      "bead",
+      "fibre",
+      "fragment"
+    ],
+    "matrix": [
+      [
+        3,
+        3,
+        1
+      ],
+      [
+        43,
+        231,
+        37
+      ],
+      [
+        68,
+        75,
+        236
+      ]
+    ]
+  },
+  "n_samples": 697,
+  "model": "swin_t",
+  "checkpoint": "evidence/public/sem_shape/sem_shape_swin_t_model.pt",
+  "device": "cuda",
+  "classes": [
+    "bead",
+    "fibre",
+    "fragment"
+  ]
+}
