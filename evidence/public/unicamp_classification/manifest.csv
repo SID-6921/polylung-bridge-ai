@@ -1,0 +1,15 @@
+sample_id,polymer_label,image_path,ftir_csv_path
+RC_MP_01,PA,data/unicamp_labeled_images/RC_MP_01_PA.png,data/microplastics_datasets/unicamp_estuary_sem_ftir/FTIR/FTIR/RC_MP_01.csv
+RC_MP_02,PP,data/unicamp_labeled_images/RC_MP_02_PP.png,data/microplastics_datasets/unicamp_estuary_sem_ftir/FTIR/FTIR/RC_MP_02.csv
+RC_MP_04,PE,data/unicamp_labeled_images/RC_MP_04_PE.png,data/microplastics_datasets/unicamp_estuary_sem_ftir/FTIR/FTIR/RC_MP_04.csv
+RC_MP_09,PVC,data/unicamp_labeled_images/RC_MP_09_PVC.png,data/microplastics_datasets/unicamp_estuary_sem_ftir/FTIR/FTIR/RC_MP_09.csv
+RC_MP_13,PE,data/unicamp_labeled_images/RC_MP_13_PE.png,data/microplastics_datasets/unicamp_estuary_sem_ftir/FTIR/FTIR/RC_MP_13.csv
+RC_MP_18,PS,data/unicamp_labeled_images/RC_MP_18_PS.png,data/microplastics_datasets/unicamp_estuary_sem_ftir/FTIR/FTIR/RC_MP_18.csv
+RC_MP_25,PP,data/unicamp_labeled_images/RC_MP_25_PP.png,data/microplastics_datasets/unicamp_estuary_sem_ftir/FTIR/FTIR/RC_MP_25.csv
+RC_MP_38,PE,data/unicamp_labeled_images/RC_MP_38_PE.png,data/microplastics_datasets/unicamp_estuary_sem_ftir/FTIR/FTIR/RC_MP_38.csv
+RC_MP_44,PE,data/unicamp_labeled_images/RC_MP_44_PE.png,data/microplastics_datasets/unicamp_estuary_sem_ftir/FTIR/FTIR/RC_MP_44.csv
+RC_MP_46,PS,data/unicamp_labeled_images/RC_MP_46_PS.png,data/microplastics_datasets/unicamp_estuary_sem_ftir/FTIR/FTIR/RC_MP_46.csv
+RC_MP_51,PE,data/unicamp_labeled_images/RC_MP_51_PE.png,data/microplastics_datasets/unicamp_estuary_sem_ftir/FTIR/FTIR/RC_MP_51.csv
+RC_MP_56,PE,data/unicamp_labeled_images/RC_MP_56_PE.png,data/microplastics_datasets/unicamp_estuary_sem_ftir/FTIR/FTIR/RC_MP_56.csv
+RC_MP_59,PP,data/unicamp_labeled_images/RC_MP_59_PP.png,data/microplastics_datasets/unicamp_estuary_sem_ftir/FTIR/FTIR/RC_MP_59.csv
+RC_MP_60,PS,data/unicamp_labeled_images/RC_MP_60_PS.png,data/microplastics_datasets/unicamp_estuary_sem_ftir/FTIR/FTIR/RC_MP_60.csv

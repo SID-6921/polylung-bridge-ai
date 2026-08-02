@@ -1,0 +1,260 @@
+{
+  "note": "n=14 proof-of-concept signal, not a validated accuracy figure. Swin-T ImageNet-pretrained, fine-tuned per-fold, 15 epochs, heavy augmentation, no internal validation split given n this small.",
+  "dataset_n": 14,
+  "dataset_class_counts": {
+    "PA": 1,
+    "PP": 3,
+    "PE": 6,
+    "PVC": 1,
+    "PS": 3
+  },
+  "panel_overlap": {
+    "panel_classes": [
+      "PE",
+      "PP",
+      "PS",
+      "PVC"
+    ],
+    "in_panel_n": 13,
+    "in_panel_class_counts": {
+      "PP": 3,
+      "PE": 6,
+      "PVC": 1,
+      "PS": 3
+    },
+    "out_of_panel_n": 1,
+    "out_of_panel_samples": [
+      {
+        "sample_id": "RC_MP_01",
+        "label": "PA"
+      }
+    ]
+  },
+  "loocv_full_n14": {
+    "tag": "full_n14",
+    "n": 14,
+    "classes": [
+      "PA",
+      "PE",
+      "PP",
+      "PS",
+      "PVC"
+    ],
+    "class_counts": {
+      "PA": 1,
+      "PP": 3,
+      "PE": 6,
+      "PVC": 1,
+      "PS": 3
+    },
+    "fold_results": [
+      {
+        "sample_id": "RC_MP_01",
+        "true_label": "PA",
+        "predicted_label": "PP",
+        "confidence": 0.8292,
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_02",
+        "true_label": "PP",
+        "predicted_label": "PE",
+        "confidence": 0.7831,
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_04",
+        "true_label": "PE",
+        "predicted_label": "PVC",
+        "confidence": 0.9535,
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_09",
+        "true_label": "PVC",
+        "predicted_label": "PE",
+        "confidence": 0.9977,
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_13",
+        "true_label": "PE",
+        "predicted_label": "PA",
+        "confidence": 0.3665,
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_18",
+        "true_label": "PS",
+        "predicted_label": "PE",
+        "confidence": 0.9985,
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_25",
+        "true_label": "PP",
+        "predicted_label": "PE",
+        "confidence": 0.9981,
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_38",
+        "true_label": "PE",
+        "predicted_label": "PS",
+        "confidence": 0.7519,
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_44",
+        "true_label": "PE",
+        "predicted_label": "PS",
+        "confidence": 0.8602,
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_46",
+        "true_label": "PS",
+        "predicted_label": "PE",
+        "confidence": 0.9922,
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_51",
+        "true_label": "PE",
+        "predicted_label": "PP",
+        "confidence": 0.7776,
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_56",
+        "true_label": "PE",
+        "predicted_label": "PS",
+        "confidence": 0.6861,
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_59",
+        "true_label": "PP",
+        "predicted_label": "PE",
+        "confidence": 0.9175,
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_60",
+        "true_label": "PS",
+        "predicted_label": "PS",
+        "confidence": 0.4446,
+        "correct": true
+      }
+    ],
+    "loocv_accuracy": 0.0714,
+    "loocv_macro_f1": 0.0571,
+    "majority_baseline_class": "PE",
+    "majority_baseline_accuracy": 0.4286
+  },
+  "loocv_pe_pp_ps_only": {
+    "tag": "pe_pp_ps_n12",
+    "n": 12,
+    "classes": [
+      "PE",
+      "PP",
+      "PS"
+    ],
+    "class_counts": {
+      "PP": 3,
+      "PE": 6,
+      "PS": 3
+    },
+    "fold_results": [
+      {
+        "sample_id": "RC_MP_02",
+        "true_label": "PP",
+        "predicted_label": "PE",
+        "confidence": 0.9749,
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_04",
+        "true_label": "PE",
+        "predicted_label": "PE",
+        "confidence": 0.9388,
+        "correct": true
+      },
+      {
+        "sample_id": "RC_MP_13",
+        "true_label": "PE",
+        "predicted_label": "PE",
+        "confidence": 0.4426,
+        "correct": true
+      },
+      {
+        "sample_id": "RC_MP_18",
+        "true_label": "PS",
+        "predicted_label": "PE",
+        "confidence": 0.9366,
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_25",
+        "true_label": "PP",
+        "predicted_label": "PE",
+        "confidence": 0.9109,
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_38",
+        "true_label": "PE",
+        "predicted_label": "PE",
+        "confidence": 0.7072,
+        "correct": true
+      },
+      {
+        "sample_id": "RC_MP_44",
+        "true_label": "PE",
+        "predicted_label": "PS",
+        "confidence": 0.9904,
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_46",
+        "true_label": "PS",
+        "predicted_label": "PE",
+        "confidence": 0.9992,
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_51",
+        "true_label": "PE",
+        "predicted_label": "PS",
+        "confidence": 0.8691,
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_56",
+        "true_label": "PE",
+        "predicted_label": "PS",
+        "confidence": 0.8219,
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_59",
+        "true_label": "PP",
+        "predicted_label": "PE",
+        "confidence": 0.8457,
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_60",
+        "true_label": "PS",
+        "predicted_label": "PS",
+        "confidence": 0.778,
+        "correct": true
+      }
+    ],
+    "loocv_accuracy": 0.3333,
+    "loocv_macro_f1": 0.2381,
+    "majority_baseline_class": "PE",
+    "majority_baseline_accuracy": 0.5
+  },
+  "singleton_class_limitation": "PA (n=1) and PVC (n=1) each have exactly one example in the full n=14 set. In true LOOCV, when a singleton class's only example is held out, the training set contains zero examples of that class -- the model cannot have learned that class's visual signature and structurally cannot predict it correctly on that fold, regardless of model quality. This is a fundamental small-n limitation, not a bug. The full n=14 LOOCV figure includes these 2 folds (which fail by construction); the PE/PP/PS-only n=12 LOOCV figure excludes them and is the more interpretable accuracy estimate."
+}
