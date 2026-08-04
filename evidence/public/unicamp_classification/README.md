@@ -42,3 +42,48 @@ PA (n=1) and PVC (n=1) each have exactly one example in the full n=14 set. In tr
 - `scripts/step1_derive_15.py` — spreadsheet/file cross-reference derivation
 - `scripts/step2_extract_images.py` — SEM image extraction (pdfimages) and manifest generation
 - `scripts/unicamp_loocv.py` — LOOCV training/evaluation script
+
+---
+
+## Follow-up: frozen pretrained features + linear classifier (SVM / logistic regression)
+
+Suggested by Selina Park (ML co-researcher) as the more appropriate approach for n this small: full fine-tuning of a large transformer has far more parameters than training examples per fold and overfits easily, whereas a linear classifier trained on frozen, high-quality pretrained features has orders of magnitude fewer free parameters. This is a legitimate hypothesis worth testing directly, so we ran it under the exact same LOOCV protocol as the fine-tuning result above, decided before looking at any per-fold outcome, for direct comparability.
+
+**Setup.** Same Swin-T backbone (torchvision, ImageNet-pretrained), but this time frozen entirely: classification head removed, `eval()` mode, no gradient updates, a single forward pass per image to get the 768-dim penultimate-layer embedding. Features were extracted once for all 14 images. For each LOOCV fold, a linear classifier (`sklearn.svm.LinearSVC` or `sklearn.linear_model.LogisticRegression`, default `C=1.0`, features standardized with `StandardScaler` fit on the fold's training data only) was trained on the frozen embeddings of the other n-1 samples and used to predict the held-out sample. Same two versions as before: full n=14 (5 classes) and PE/PP/PS-only n=12 (excludes singleton classes PA, PVC).
+
+**Result: also negative, and worse than the fine-tuning result on the full n=14 set.**
+
+| Version | Classifier | LOOCV accuracy | Macro F1 | Majority baseline |
+|---|---|---|---|---|
+| Full n=14 | Linear SVM | **0.0%** (0/14) | 0.000 | 42.9% |
+| Full n=14 | Logistic regression | **7.1%** (1/14) | 0.027 | 42.9% |
+| PE/PP/PS only, n=12 | Linear SVM | **0.0%** (0/12) | 0.000 | 50.0% |
+| PE/PP/PS only, n=12 | Logistic regression | **8.3%** (1/12) | 0.051 | 50.0% |
+
+Every configuration falls well below its majority baseline. Logistic regression matches the fine-tuning approach's 7.1% on the full n=14 set (both get exactly 1/14 folds right, though not the same fold) but does not beat it, and is still far below baseline. Linear SVM performs worse than fine-tuning in both versions (0% vs. 7.1%/33.3%). Freezing the backbone did not rescue the signal.
+
+**Interpretation.** The overfitting-from-fine-tuning hypothesis does not appear to be the dominant failure mode here — removing the fine-tuning parameters entirely still leaves the classifier unable to beat trivial guessing. The more likely explanation is that generic ImageNet features (whether fine-tuned or used frozen) do not capture whatever visual signal, if any, distinguishes these five polymer classes in this particular SEM image set, and/or that n=14 (11-13 per fold) is simply too small for any classifier, however parameter-light, to learn a reliable class boundary here. This is consistent with — and reinforces, rather than resolves — the project's existing conclusion that Aim 1 needs a properly sized paired SEM+polymer-ID benchmark; a linear classifier's inability to do better than fine-tuning on the same 14 images is itself evidence that the bottleneck is data quantity/quality, not model capacity.
+
+**Files.**
+- `evidence/public/unicamp_classification/loocv_frozen_features_results.json` — per-fold results (predictions, correctness) for all four configurations (SVM/logreg × full/PE-PP-PS-only), aggregate accuracy/macro-F1, majority baselines
+- `scripts/unicamp_loocv_frozen_features.py` — frozen-feature extraction + per-fold linear classifier LOOCV script
+
+---
+
+## Third-pass attempts: spectral cross-validation, fused features, classical features
+
+Three further, independent methods were tried on the n=14 UNICAMP set, none of which involve full fine-tuning (to rule out overfitting-from-fine-tuning as the sole cause of the earlier negative results).
+
+| Method | n=14 accuracy | n=14 majority baseline | n=12 (PE/PP/PS) accuracy | n=12 majority baseline |
+|---|---|---|---|---|
+| FLOPP-trained spectral model, pure inference on UNICAMP spectra (no training on UNICAMP at all) | 0.0% | 42.9% | n/a (single run, not split by panel) | n/a |
+| Classical GLCM texture + shape descriptors, linear SVM/logreg | 28.6% | 42.9% | 25.0% | 50.0% |
+| Fused frozen image embedding + spectral PCA features, linear SVM/logreg | 0.0–7.1% | 42.9% | 0.0–16.7% | 50.0% |
+
+**FLOPP-model-on-UNICAMP-spectra finding (important, separate from the accuracy result):** diagnostic inspection of raw spectral intensity values revealed a large scale mismatch between the two instruments/labs -- FLOPP absorbance values range roughly 0-113 (mean ~93), UNICAMP's range roughly -4 to 6.6 (mean ~1.3). The trained model sees UNICAMP spectra as far outside its training distribution, collapsing predictions to a single class. This is a genuine, actionable methodological finding (cross-instrument spectral normalization would need to be solved before any cross-lab spectral transfer is attempted), not evidence that no polymer signal exists in the UNICAMP spectra -- but as tested, this approach produced 0% and no usable classification result.
+
+## Overall verdict across all five methods tried
+
+Combined with the two earlier attempts (full fine-tuning: 7.1% n=14 / 33.3% n=12; frozen-feature SVM/logreg: 0.0-8.3%), **five independent methods have now been tried on the UNICAMP n=14 set, and all five perform at or below the majority-class baseline.** No configuration of architecture (Swin-T fine-tuned, Swin-T frozen), classifier (deep, linear SVM, logistic regression), or feature type (deep image, classical image, spectral, fused image+spectral) produced a result that beats trivially guessing the most common class.
+
+This is a consistent, honest, and now well-triangulated conclusion: **n=14 cannot support a classification claim by any method attempted so far.** The bottleneck is data quantity, not model choice, feature type, or evaluation protocol. This is not a negative reflection on the underlying feasibility of SEM+FTIR polymer classification -- it is direct, first-hand evidence for exactly the claim Aim 1's Significance section makes: a benchmark at this scale (n=14) is fundamentally insufficient, and the field-wide absence of a larger public paired dataset is a real, well-characterized gap, not a hypothetical one. Per PI instruction, this data and every attempt made on it are excluded from the grant application's Preliminary Studies section, but are preserved here as an honest, reproducible lab record.

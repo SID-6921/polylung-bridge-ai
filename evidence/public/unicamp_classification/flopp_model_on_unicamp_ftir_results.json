@@ -1,0 +1,242 @@
+{
+  "note": "n=14 proof-of-concept, not a validated accuracy figure. The EXISTING FLOPP-trained RandomForest spectral classifier (trained fresh here on all of FLOPP, same code/params as scripts/spectral_polymer_train.py) is evaluated via pure inference on UNICAMP's 14 FTIR spectra (Brazil, different lab/instrument than FLOPP). NO retraining on UNICAMP data -- this sidesteps the small-n training problem entirely, analogous to the existing FLOPP-e weathered-spectra external validation.",
+  "flopp_training_classes": [
+    "ABS",
+    "AC",
+    "CO",
+    "PA",
+    "PC",
+    "PE",
+    "PET",
+    "PEVA",
+    "PLA",
+    "PP",
+    "PS",
+    "PU",
+    "PVC",
+    "R"
+  ],
+  "n_unicamp_samples": 14,
+  "unicamp_class_counts": {
+    "PA": 1,
+    "PP": 3,
+    "PE": 6,
+    "PVC": 1,
+    "PS": 3
+  },
+  "all_labels_in_confusion_matrix": [
+    "ABS",
+    "CO",
+    "PA",
+    "PE",
+    "PP",
+    "PS",
+    "PVC",
+    "R"
+  ],
+  "confusion_matrix": [
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    [
+      3,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      2
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      3
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      3
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  ],
+  "fold_results": [
+    {
+      "sample_id": "RC_MP_01",
+      "true_label": "PA",
+      "predicted_label": "R",
+      "confidence": 0.7133,
+      "correct": false,
+      "true_label_in_flopp_training_classes": true
+    },
+    {
+      "sample_id": "RC_MP_02",
+      "true_label": "PP",
+      "predicted_label": "R",
+      "confidence": 0.7133,
+      "correct": false,
+      "true_label_in_flopp_training_classes": true
+    },
+    {
+      "sample_id": "RC_MP_04",
+      "true_label": "PE",
+      "predicted_label": "R",
+      "confidence": 0.7133,
+      "correct": false,
+      "true_label_in_flopp_training_classes": true
+    },
+    {
+      "sample_id": "RC_MP_09",
+      "true_label": "PVC",
+      "predicted_label": "R",
+      "confidence": 0.7133,
+      "correct": false,
+      "true_label_in_flopp_training_classes": true
+    },
+    {
+      "sample_id": "RC_MP_13",
+      "true_label": "PE",
+      "predicted_label": "R",
+      "confidence": 0.7133,
+      "correct": false,
+      "true_label_in_flopp_training_classes": true
+    },
+    {
+      "sample_id": "RC_MP_18",
+      "true_label": "PS",
+      "predicted_label": "R",
+      "confidence": 0.7133,
+      "correct": false,
+      "true_label_in_flopp_training_classes": true
+    },
+    {
+      "sample_id": "RC_MP_25",
+      "true_label": "PP",
+      "predicted_label": "R",
+      "confidence": 0.7133,
+      "correct": false,
+      "true_label_in_flopp_training_classes": true
+    },
+    {
+      "sample_id": "RC_MP_38",
+      "true_label": "PE",
+      "predicted_label": "ABS",
+      "confidence": 0.2033,
+      "correct": false,
+      "true_label_in_flopp_training_classes": true
+    },
+    {
+      "sample_id": "RC_MP_44",
+      "true_label": "PE",
+      "predicted_label": "ABS",
+      "confidence": 0.1867,
+      "correct": false,
+      "true_label_in_flopp_training_classes": true
+    },
+    {
+      "sample_id": "RC_MP_46",
+      "true_label": "PS",
+      "predicted_label": "R",
+      "confidence": 0.7133,
+      "correct": false,
+      "true_label_in_flopp_training_classes": true
+    },
+    {
+      "sample_id": "RC_MP_51",
+      "true_label": "PE",
+      "predicted_label": "CO",
+      "confidence": 0.28,
+      "correct": false,
+      "true_label_in_flopp_training_classes": true
+    },
+    {
+      "sample_id": "RC_MP_56",
+      "true_label": "PE",
+      "predicted_label": "ABS",
+      "confidence": 0.2067,
+      "correct": false,
+      "true_label_in_flopp_training_classes": true
+    },
+    {
+      "sample_id": "RC_MP_59",
+      "true_label": "PP",
+      "predicted_label": "R",
+      "confidence": 0.7133,
+      "correct": false,
+      "true_label_in_flopp_training_classes": true
+    },
+    {
+      "sample_id": "RC_MP_60",
+      "true_label": "PS",
+      "predicted_label": "R",
+      "confidence": 0.7133,
+      "correct": false,
+      "true_label_in_flopp_training_classes": true
+    }
+  ],
+  "accuracy": 0.0,
+  "macro_f1": 0.0,
+  "majority_baseline_class": "PE",
+  "majority_baseline_accuracy": 0.4286,
+  "in_panel_only": {
+    "n": 14,
+    "accuracy": 0.0,
+    "note": "restricted to UNICAMP samples whose true label is present in the FLOPP training class set"
+  }
+}

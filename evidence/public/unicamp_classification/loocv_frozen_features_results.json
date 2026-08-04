@@ -1,0 +1,420 @@
+{
+  "note": "n=14 proof-of-concept signal, not a validated accuracy figure. Frozen ImageNet-pretrained Swin-T backbone (classification head removed, no fine-tuning, eval mode, single forward pass per image) used purely as a feature extractor. A simple linear classifier (LinearSVC or LogisticRegression, sklearn defaults with C=1.0, features standardized per fold) is fit per-fold on the frozen embeddings of the other n-1 samples. Same LOOCV protocol as scripts/unicamp_loocv.py (full n=14 and PE/PP/PS-only n=12) for direct comparability with the earlier full-fine-tuning result. This exact protocol was fixed before inspecting any per-fold outcome (mirrors the prior script's structure).",
+  "dataset_n": 14,
+  "dataset_class_counts": {
+    "PA": 1,
+    "PP": 3,
+    "PE": 6,
+    "PVC": 1,
+    "PS": 3
+  },
+  "loocv_full_n14_svm": {
+    "tag": "full_n14",
+    "classifier": "svm",
+    "backbone": "swin_t",
+    "n": 14,
+    "classes": [
+      "PA",
+      "PE",
+      "PP",
+      "PS",
+      "PVC"
+    ],
+    "class_counts": {
+      "PA": 1,
+      "PP": 3,
+      "PE": 6,
+      "PVC": 1,
+      "PS": 3
+    },
+    "fold_results": [
+      {
+        "sample_id": "RC_MP_01",
+        "true_label": "PA",
+        "predicted_label": "PP",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_02",
+        "true_label": "PP",
+        "predicted_label": "PS",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_04",
+        "true_label": "PE",
+        "predicted_label": "PVC",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_09",
+        "true_label": "PVC",
+        "predicted_label": "PE",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_13",
+        "true_label": "PE",
+        "predicted_label": "PA",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_18",
+        "true_label": "PS",
+        "predicted_label": "PP",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_25",
+        "true_label": "PP",
+        "predicted_label": "PA",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_38",
+        "true_label": "PE",
+        "predicted_label": "PA",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_44",
+        "true_label": "PE",
+        "predicted_label": "PS",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_46",
+        "true_label": "PS",
+        "predicted_label": "PVC",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_51",
+        "true_label": "PE",
+        "predicted_label": "PP",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_56",
+        "true_label": "PE",
+        "predicted_label": "PP",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_59",
+        "true_label": "PP",
+        "predicted_label": "PA",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_60",
+        "true_label": "PS",
+        "predicted_label": "PP",
+        "correct": false
+      }
+    ],
+    "loocv_accuracy": 0.0,
+    "loocv_macro_f1": 0.0,
+    "majority_baseline_class": "PE",
+    "majority_baseline_accuracy": 0.4286
+  },
+  "loocv_pe_pp_ps_only_svm": {
+    "tag": "pe_pp_ps_n12",
+    "classifier": "svm",
+    "backbone": "swin_t",
+    "n": 12,
+    "classes": [
+      "PE",
+      "PP",
+      "PS"
+    ],
+    "class_counts": {
+      "PP": 3,
+      "PE": 6,
+      "PS": 3
+    },
+    "fold_results": [
+      {
+        "sample_id": "RC_MP_02",
+        "true_label": "PP",
+        "predicted_label": "PS",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_04",
+        "true_label": "PE",
+        "predicted_label": "PP",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_13",
+        "true_label": "PE",
+        "predicted_label": "PS",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_18",
+        "true_label": "PS",
+        "predicted_label": "PP",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_25",
+        "true_label": "PP",
+        "predicted_label": "PE",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_38",
+        "true_label": "PE",
+        "predicted_label": "PS",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_44",
+        "true_label": "PE",
+        "predicted_label": "PS",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_46",
+        "true_label": "PS",
+        "predicted_label": "PE",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_51",
+        "true_label": "PE",
+        "predicted_label": "PP",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_56",
+        "true_label": "PE",
+        "predicted_label": "PP",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_59",
+        "true_label": "PP",
+        "predicted_label": "PS",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_60",
+        "true_label": "PS",
+        "predicted_label": "PP",
+        "correct": false
+      }
+    ],
+    "loocv_accuracy": 0.0,
+    "loocv_macro_f1": 0.0,
+    "majority_baseline_class": "PE",
+    "majority_baseline_accuracy": 0.5
+  },
+  "loocv_full_n14_logreg": {
+    "tag": "full_n14",
+    "classifier": "logreg",
+    "backbone": "swin_t",
+    "n": 14,
+    "classes": [
+      "PA",
+      "PE",
+      "PP",
+      "PS",
+      "PVC"
+    ],
+    "class_counts": {
+      "PA": 1,
+      "PP": 3,
+      "PE": 6,
+      "PVC": 1,
+      "PS": 3
+    },
+    "fold_results": [
+      {
+        "sample_id": "RC_MP_01",
+        "true_label": "PA",
+        "predicted_label": "PE",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_02",
+        "true_label": "PP",
+        "predicted_label": "PE",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_04",
+        "true_label": "PE",
+        "predicted_label": "PP",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_09",
+        "true_label": "PVC",
+        "predicted_label": "PE",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_13",
+        "true_label": "PE",
+        "predicted_label": "PS",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_18",
+        "true_label": "PS",
+        "predicted_label": "PE",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_25",
+        "true_label": "PP",
+        "predicted_label": "PE",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_38",
+        "true_label": "PE",
+        "predicted_label": "PS",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_44",
+        "true_label": "PE",
+        "predicted_label": "PS",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_46",
+        "true_label": "PS",
+        "predicted_label": "PE",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_51",
+        "true_label": "PE",
+        "predicted_label": "PE",
+        "correct": true
+      },
+      {
+        "sample_id": "RC_MP_56",
+        "true_label": "PE",
+        "predicted_label": "PP",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_59",
+        "true_label": "PP",
+        "predicted_label": "PE",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_60",
+        "true_label": "PS",
+        "predicted_label": "PE",
+        "correct": false
+      }
+    ],
+    "loocv_accuracy": 0.0714,
+    "loocv_macro_f1": 0.0267,
+    "majority_baseline_class": "PE",
+    "majority_baseline_accuracy": 0.4286
+  },
+  "loocv_pe_pp_ps_only_logreg": {
+    "tag": "pe_pp_ps_n12",
+    "classifier": "logreg",
+    "backbone": "swin_t",
+    "n": 12,
+    "classes": [
+      "PE",
+      "PP",
+      "PS"
+    ],
+    "class_counts": {
+      "PP": 3,
+      "PE": 6,
+      "PS": 3
+    },
+    "fold_results": [
+      {
+        "sample_id": "RC_MP_02",
+        "true_label": "PP",
+        "predicted_label": "PE",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_04",
+        "true_label": "PE",
+        "predicted_label": "PP",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_13",
+        "true_label": "PE",
+        "predicted_label": "PE",
+        "correct": true
+      },
+      {
+        "sample_id": "RC_MP_18",
+        "true_label": "PS",
+        "predicted_label": "PE",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_25",
+        "true_label": "PP",
+        "predicted_label": "PE",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_38",
+        "true_label": "PE",
+        "predicted_label": "PS",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_44",
+        "true_label": "PE",
+        "predicted_label": "PS",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_46",
+        "true_label": "PS",
+        "predicted_label": "PE",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_51",
+        "true_label": "PE",
+        "predicted_label": "PP",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_56",
+        "true_label": "PE",
+        "predicted_label": "PP",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_59",
+        "true_label": "PP",
+        "predicted_label": "PE",
+        "correct": false
+      },
+      {
+        "sample_id": "RC_MP_60",
+        "true_label": "PS",
+        "predicted_label": "PE",
+        "correct": false
+      }
+    ],
+    "loocv_accuracy": 0.0833,
+    "loocv_macro_f1": 0.0513,
+    "majority_baseline_class": "PE",
+    "majority_baseline_accuracy": 0.5
+  },
+  "comparison_to_fine_tuning": "Prior full-fine-tuning LOOCV (evidence/public/unicamp_classification/loocv_results.json): 7.1% accuracy on full n=14, 33.3% accuracy on PE/PP/PS-only n=12, both below majority baseline -- attributed to catastrophic overfitting from fine-tuning a full transformer on 11-13 training images per fold. This script instead freezes the backbone entirely and fits only a linear classifier per fold."
+}
